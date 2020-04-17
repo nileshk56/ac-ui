@@ -1,0 +1,54 @@
+<%- include('head') %>
+<%- include('header') %>    
+<%- include('left_nav') %>
+
+<div class="col-md-10" style="padding-top:20px">
+    <h1>Refferals</h1>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-6">
+            <p><h3>Total Referral BTC Amount</h3></p>
+            <p><h4>Total Earned BTC : <%= refStats.totalReferralBTCAmount %></h4></p>
+            <p><h4>Total Paid BTC : <%= refStats.totalPaidReferralBTCAmount %></h4></p>
+            <p><h4>Total Unpaid BTC : <%= refStats.totalUnaidReferralBTCAmount %></h4></p>            
+        </div>
+        <div class="col-md-6">
+            <p><h3>Your Referral Details</h3></p>
+            <p><h4>Your referral code : <%= refDet.referral_code %></h4></p>
+            <p><h4>Your parent referral code : <%= refDet.parent_referral_code %></h4></p>
+        </div>
+    </div>
+    
+    <hr />
+    <table class="table table-striped">
+        <tr>
+            <th>Email</th>
+            <th>Paid Status</th>
+            <th>Added</th>
+        </tr>
+        <% if(referrals.length == 0) { %>
+            <tr><td colspan="3">
+            <div class="alert alert-danger alert-dismissible">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>No data available !</strong> 
+            </div></td>
+            </tr>
+        <% } else { referrals.forEach(function(referral) { %>
+            <tr>
+                <td><%= referral.email %></td>
+                <td><%= referral.referral_status %></td>
+                <td><%= referral.referral_created %></td>
+            </tr>
+        <% }); } %>
+    </table>
+
+    <% if(strPagination) { %>
+        <ul class="pagination">
+            <%- strPagination %>
+        </ul>    
+    <% } %>
+
+</div>
+
+<%- include('footer') %>

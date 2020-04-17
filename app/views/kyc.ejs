@@ -1,0 +1,58 @@
+<div class="container-fluid">
+        <%- include('head') %>
+        <%- include('header') %>
+        <%- include('left_nav') %>
+        <div class="col-md-10">
+            
+            <% if (msg) { %>
+                <br>
+                <div class="alert alert-success alert-dismissible text-center">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <b><%= msg %></b>
+                </div>
+            <% } %>
+            
+            <h2>KYC</h2>
+            
+            
+            <table class="table">
+                <tr>
+                    <th class="col-md-3">First Name</th>
+                    <td><%- kyc.first_name %></td>
+                </tr>
+                <tr>
+                    <th>Last Name</th>
+                    <td><%- kyc.last_name %></td>
+                </tr>
+                <tr>
+                    <th>Gender</th>
+                    <td><%- kyc.gender %></td>
+                </tr>
+                <tr>
+                    <th>Date Of Birth</th>
+                    <td><%- kyc.dob %></td>
+                </tr>
+                <tr>
+                    <th>City</th>
+                    <td><%- kyc.city %></td>
+                </tr>
+                <tr>
+                    <th>State</th>
+                    <td><%- kyc.state %></td>
+                </tr>
+                <tr>
+                    <th>Country</th>
+                    <td><%- kyc.country %></td>
+                </tr>
+                <tr>
+                    <th>Address Proof</th>
+                    <td><img class="img-responsive" src="<%- kyc.address_proof %>"/></td>
+                </tr>
+                <tr>
+                    <th>Identity Proof</th>
+                    <td><img class="img-responsive" src="<%- kyc.identity_proof %>"/></td>
+                </tr>
+            </table>
+        </div>
+        <%- include('footer') %>
+    </div>

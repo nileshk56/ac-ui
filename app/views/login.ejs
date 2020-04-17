@@ -1,0 +1,100 @@
+<%- include('head') %>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand text-danger font-weight-bolder" href="javascript:void(0)">Logo</a>
+  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navb">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navb">
+    <!--<ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="javascript:void(0)">Link</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="javascript:void(0)">Link</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="javascript:void(0)">Disabled</a>
+      </li>
+    </ul>-->
+    <form class="form-inline my-2 my-lg-0 ml-auto" method="post" action="/login">
+      <input class="form-control mr-sm-2" type="text" name="username" placeholder="Username">
+      <input class="form-control mr-sm-2" type="text" name="password" placeholder="Password">
+      <button class="btn btn-danger my-2 my-sm-0 font-weight-bold" type="submit">Login</button>
+    </form>
+  </div>
+</nav>
+
+<div class="container">
+    <% if (msg) { %>
+      <div class="alert alert-success alert-dismissible text-center">
+          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+          <b><%= msg %></b>
+      </div>
+    <% } %>  
+    <div class="row mt-5 mb-5">
+      <div class="col-md-6 text-left" style="padding-top:30px">
+          <h1 class="display-4">What is Critic's Web</h1>
+          <br>
+          <h3>
+              <small>Anonymous messaging, feedback and review platform.</small>
+          </h3>
+          <br>
+          <h3>
+              <small>Take anonymous feedback, review or complaints from people you know.</small>
+          </h3>
+          <br>
+          <h3>
+              <small>Give reply on the feedback.</small>
+          </h3>
+          <br>
+          <h3>
+              <small>Publish the appropriate feedback to the world.</small>
+          </h3>
+      </div>
+      
+      <div class="col-md-6" style="padding-top:30px">
+          <h1 class="display-4">Sign Up</h1>
+          <br>
+          <form action="/signup" method="post">
+              
+              <div class="form-group form-row">
+                  <div class="col-sm-10">
+                      <input type="text" class="form-control input-lg" id="username"  name="username" placeholder="Username">
+                  </div>
+              </div>
+              <div class="form-group form-row">
+                  <div class="col-sm-10"> 
+                      <input type="password" class="form-control input-lg" id="password" name="password" placeholder="Password">
+                  </div>
+              </div>
+              <div class="form-group form-row">
+                  <div class="col-sm-10"> 
+                      <!--<label class="radio-inline input-lg">
+                          <input type="radio" name="gender" value="M">Male
+                      </label>
+                      <label class="radio-inline input-lg">
+                          <input type="radio" name="gender" value="F">Female
+                      </label>--> 
+                      <div class="form-check-inline">
+                          <label class="form-check-label">
+                              <input type="radio" class="form-check-input" name="gender" value="M">Male
+                          </label>
+                          </div>
+                          <div class="form-check-inline">
+                          <label class="form-check-label">
+                              <input type="radio" class="form-check-input" name="gender" value="F">Female
+                          </label>
+                      </div>
+                  </div>
+              </div>
+              <div class="form-group form-row"> 
+                  <div class="col-sm-10">
+                  <button type="submit" class="btn btn-success input-lg">Sign Up</button>
+                  </div>
+              </div>
+          </form>
+      </div>
+  </div>
+</div>
+<%- include('footer') %>

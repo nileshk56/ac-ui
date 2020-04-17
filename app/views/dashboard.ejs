@@ -1,0 +1,121 @@
+<script>
+    var depositAddress = <%= depositAddress %>;
+</script>
+<div class="col-md-10" style="padding-top:20px">
+    <div class="row">
+        <div class="col-md-8">
+            <h1>Dashboard</h1>
+        </div>
+        
+        <% if (user.status == 'ACTIVE') { %> 
+            <div class="col-md-4" >
+                <h1 class="text-primary">Buy Tokens</h1>
+                <hr>
+                
+                <form action="/buy_tokens" id="frmBuyTokens" method="post">
+                    <div class="form-group">
+                        <label for="buy_with">Buy With</label>
+                        <select class="form-control" name="buy_with" id="buy_with">
+                            <option value="BTC" selected="selected">BTC</option>
+                            <option value="ETH">ETH</option>
+                            <option value="USD">USD</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="curr_amount">AMOUNT</label>
+                        <input type="text" class="form-control" name="curr_amount" id="curr_amount">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="token_amount">TOKEN AMOUNT</label>
+                        <input type="text" class="form-control" name="token_amount" id="token_amount">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="from_address">From Address</label>
+                        <input type="text" class="form-control" name="from_address" id="from_address">
+                        <span class="text-warning">* The address from which you are going to send the Amount</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="to_address">To Address</label>
+                        <input type="text" class="form-control" name="to_address" id="to_address">
+                        <span class="text-warning">* The address on which you want to receive the tokens</span>
+                    </div>
+
+                    <div class="form-group">
+                        <!--<button type="submit" class="btn btn-success" id="btn_submit_buy_form" onclick="return false;">Submit</button>-->
+                        <button type="button" class="btn btn-success" id="btn_submit_buy_form" >Submit</button>
+                    </div>
+
+                </form>
+            </div>
+        <% } else { %>
+            <div class="col-md-4">
+                <h1>Buy Tokens</h1>
+                <h3 class="text-danger">Only KYC verified users are allowed to purchase the tokens</h3></div>    
+        <% }%>
+    </div>
+</div>
+
+
+<div id="modal_deposit_ETH" class="modal fade modal_deposit" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Ethereum Deposit</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                <input type="text" id="deposit_address_ETH" disabled class="form-control input-lg" /> <input type="button" value="Copy" class="btn btn-success" />
+                </p><br>
+                <p>Please wait for 30 minute for tokens to reflect in your account</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modal_deposit_BTC" class="modal fade modal_deposit" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Bitcoin Deposit</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                <input type="text" id="deposit_address_BTC" disabled  /> <input type="button" value="Copy" class="btn btn-success" />
+                </p><br>
+                <p>Please wait for 30 minute for tokens to reflect in your account</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modal_deposit_USD" class="modal fade modal_deposit" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Bank Deposit</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                <input type="text" value="1345 7234 5678 0986" disabled /> <input type="button" value="Copy" class="btn btn-success" />
+                </p><br>
+                <p>Please wait for 30 minute for tokens to reflect in your account</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

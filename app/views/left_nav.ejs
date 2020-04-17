@@ -1,0 +1,9 @@
+<div class="card ">
+  <img class="card-img-top" src="<%= user.image ? user.image : "https://nk-s3.s3.amazonaws.com/ac/images/nouser.png" %>" alt="Card image" style="width:100%">
+    <div class="card-body">
+        <a href="#" class="card-link" id="btnUPP">Upload Photo</a><hr />
+        <h4 class="card-title"><%= user.username %></h4>
+        <p class="card-text">Share profile on social network and ask your friends, colleague, relatives etc... to give your review anonymously</p>
+        <button href="#" class="btn btn-primary" data-toggle="modal" data-target="#modalShareProfile">Share Profile</button>
+    </div>
+  </div>

@@ -1,0 +1,63 @@
+<div class="container-fluid">
+    <%- include('head') %>
+    <%- include('header') %>
+    <%- include('left_nav') %>
+    <div class="col-md-10">
+        <h2>KYC</h2>
+        <hr>
+        <% if(user.status == 'KYC_ADDED') {%>
+            <div class="alert alert-danger text-center alert-dismissible" style="display:none" id="divMsg">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <b>KYC Verification is pending</b>
+            </div>                
+        <% } %>
+        <form method="post" class="form-horizontal col-md-5" action="/kyc" enctype="multipart/form-data">
+            <div class="form-group">
+                <h4>First Name</h4>
+                <input type="text" class="form-control" name="first_name" placeholder="Enter First Name">
+            </div>
+            <div class="form-group">
+                <h4>Last Name</h4>
+                <input type="text" class="form-control" name="last_name" placeholder="Enter Last Name">
+            </div>
+            <div class="form-group">
+                <h4>Gender</h4>
+                <label class="radio-inline">
+                    <input type="radio" name="gender" value="M">Male
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="gender" value="F">Female
+                </label>
+            </div>
+            <div class="form-group">
+                <h4>Date OF Birth</h4>
+                <input type="text" class="form-control" name="dob" id="dob" placeholder="Date Of Birth" required>
+            </div>
+            <div class="form-group">
+                <h4>City</h4>
+                <input type="text" class="form-control" name="city" placeholder="Enter City" >
+            </div>
+            <div class="form-group">
+                <h4>State</h4>
+                <input type="text" class="form-control" name="state" placeholder="Enter State" >
+            </div>
+            <div class="form-group">
+                <h4>Country</h4>
+                <input type="text" class="form-control" name="country" placeholder="Enter Country" >
+            </div>
+            <div class="form-group">
+                <h4>Address Proof</h4>
+                <input type="File" class="form-control" name="address_proof" placeholder="Address Proof" >
+            </div>
+            <div class="form-group">
+                <h4>Identity Proof</h4>
+                <input type="File" class="form-control" name="identity_proof" placeholder="Address Proof" >
+            </div>
+            <div class="form-group"> 
+                <button type="submit" class="btn btn-success">Submit</button>
+                
+            </div>
+        </form>
+    </div>
+    <%- include('footer') %>
+</div>
