@@ -139,7 +139,7 @@ class Home extends Base {
                 var s3 = new app.lib.AWS.S3({apiVersion: '2006-03-01'});
                 var uploadParams = {
                     Bucket: "nk-s3", 
-                    Key: mediaFileName, 
+                    Key: app.config.uploads.s3UploadPath + "/" +mediaFileName, 
                     Body: fs.createReadStream(mediaFilePath),
                     ContentType: mediaFile.mimetype,
                     ACL: 'public-read'

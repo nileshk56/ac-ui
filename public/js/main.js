@@ -47,6 +47,26 @@ $( document ).ready(function() {
         });
     });
 
+    $(document).on('click', ".btnPostLike", function(event){
+		/*var url = $(this).attr('href');
+		var id = $(this).attr('id');
+		var postId = parseInt(id.split("_")[1]);
+		var likeCount = parseInt($("#likeCount_"+postId).html()) + 1;
+		var dislikeCount = parseInt($("#likeCount_"+postId).html());
+		$.get(url, function(data, status){
+	        $("#like_"+postId).hide();
+	        $("#dislike_"+postId).hide();
+	    	$("#likeCount_"+postId).html("Likes " + likeCount);
+	    	$("#dislikeCount_"+postId).html("Dislikes " + dislikeCount);
+        });*/
+        var postId = parseInt($(this).data("postid"));
+        var likeCount = parseInt($(this).data("likecount"));
+        $(this).children("span").html(likeCount +1);
+
+		return false;
+	});
+
+
     /*$( "#dob" ).datepicker({
         changeMonth: true,
         changeYear: true,

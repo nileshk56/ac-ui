@@ -1,4 +1,4 @@
-<div class="media p-2 pb-4 mb-2 bg-light">
+<div class="media p-2 pb-4 mb-2">
     <div class="media-body"><img src="http://localhost/thoughts/public/uploads/images/ef89aee5f5b00c1a13d09ba12ee65561.jpg" alt="John Doe" class="mr-3 rounded-circle float-left" style="width:50px;">
       <h4><%= username %> <small><i>Posted just now</i></small></h4>
       <% if(post_desc) { %>
@@ -19,9 +19,14 @@
       <% } %>
       
       <div class="d-flex border-top border-bottom">
-        <div class="p-2 text-center flex-fill">Like</div>
-        <div class="p-2 text-center flex-fill">Comment</div>
-        <div class="p-2 text-center flex-fill">Share</div>
+        <div class="p-2 text-center flex-fill">
+          <a href="#" class="btnPostLike" data-postid="<%= post_id %>" data-likecount="<%= like_count %>">Like <span class="font-weight-bold text-secondary"><%= like_count %></span></a> 
+        </div>
+        <div class="p-2 text-center flex-fill">
+          <a href="#" class="btnPostComment" data-postid="<%= post_id %>" data-commentcount="<%= comment_count %>">Comment</a> <span class="font-weight-bold text-secondary"><%= comment_count %></span>
+        </div>
+        <div class="p-2 text-center flex-fill">
+          <a href="#" class="btnPostShare" data-postid="<%= post_id %>" data-sharecount="<%= share_count %>">Share</a> <span class="font-weight-bold text-secondary"><%= share_count %></span></div>
       </div>
     </div>
 </div>

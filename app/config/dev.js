@@ -4,7 +4,7 @@ module.exports = {
     db : {
         mysql : {
             host            : "localhost",
-            user            : "root",
+            user            : "nilesh56",
             password        : "nilesh56",
             database        : "ac"
         },
@@ -24,17 +24,7 @@ module.exports = {
     },
     uploads : {
         uploadpath : 'uploads',
-        kyc : 'uploads/kyc'
-    },
-    apiCurrency : {
-        apiUrl : "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest",
-        apiKey : "f8f4410d-cfb0-49d7-9368-6abc3b2a73f6"
-    },
-    tokenPrice : 0.1,
-    referral : {
-        amount : {
-            BTC : 0.001
-        }
+        s3UploadPath : "ac/uploads"
     },
     mailer : {
         host: "mail.wharfstreettechnologies.com",
