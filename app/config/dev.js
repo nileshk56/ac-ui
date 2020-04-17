@@ -49,6 +49,7 @@ module.exports = {
         }  
     },
     mimeTypes : {
-        images : ["image/gif", "image/jpeg", "image/png"]
+        images : ["image/gif", "image/jpeg", "image/png"],
+        videos : ["video/x-msvideo", "video/mpeg", "video/3gpp", "video/mp4"]
     }
 };

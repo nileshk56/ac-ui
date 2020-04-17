@@ -1,13 +1,19 @@
 <%- include('head') %>
 <%- include('header') %>
-<div class="container" id="divPosts">
+<div class="container" >
     <div class="row">
         <div class="col-md-6">
             <%- include('tabs') %>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6" id="divPosts">
+
+
+          <% if(posts) {
+            posts.forEach(function(post){ %>
+              <%- include('single_post', post); %>
+          <% }) } %>
 
             <div class="media p-2 pb-4 mb-2 bg-light">
                 <div class="media-body"><img src="http://localhost/thoughts/public/uploads/images/ef89aee5f5b00c1a13d09ba12ee65561.jpg" alt="John Doe" class="mr-3 rounded-circle float-left" style="width:50px;">

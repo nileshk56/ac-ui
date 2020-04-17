@@ -12,7 +12,6 @@ $( document ).ready(function() {
 
     $("#btnAddMedia").click(function(){
         $("#filePostsMedia").click();
-        $("#filePostsMedia").show();
     });
 
     $("#frmAddCreatePost").submit(function(e){
@@ -39,18 +38,11 @@ $( document ).ready(function() {
             cache: false,
             timeout: 600000,
             success: function (data) {
-
-                $("#result").text(data);
-                console.log("SUCCESS : ", data);
-                $("#btnSubmit").prop("disabled", false);
-
+                $( "#frmAddCreatePost" ).fadeTo( "slow", 1 );
+                $("#divPosts").prepend(data);
             },
             error: function (e) {
-
-                $("#result").text(e.responseText);
                 console.log("ERROR : ", e);
-                $("#btnSubmit").prop("disabled", false);
-
             }
         });
     });

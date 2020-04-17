@@ -6,12 +6,33 @@ class Home extends Base {
 
     renderHome(req, res) {
         
+
         var viewData = {
             user : req.session.user,
-            depositAddress : app.config.depositAddress
+            msg : req.session.msg
         };
 
-        res.render('home', viewData);
+        //we want to show user lots of new posts if we keep only sort by like_count then user will see same posts
+        //save above sortby in session so for further more/pagination request we will show him the sorted posts
+        //this sortby stored in session is used in renderPosts()
+        var sortBy = (Math.floor(Math.random()*10) % 2 == 0) ? "like_count" : "created";
+        req.session.postsSortBy = {[sortBy] : "DESC"};
+
+        var qr = "select * from posts p, users u where p.user_id = u.user_id order by p."+sortBy+" desc limit 0, 10";
+        console.log("QRR", qr);
+        //modelUsers.fetch('posts', '*', null, req.session.postsSortBy, 10, 0, function(err, results){
+        app.db.mysql.query(qr, function(err, results){
+
+            var viewData = {
+                posts : results,
+                user : req.session.user,
+                msg : req.session.msg
+            };
+
+            console.log("asdfad",viewData)
+
+            res.render('home', viewData);
+        })
     }
 
     renderKYC(req, res) {
@@ -92,42 +113,61 @@ class Home extends Base {
         let mediaFile = req.files.filePostsMedia;
         let mediaFilePath = uploadPath + new Date().getTime() + mediaFile.name;
         let mediaFileName = new Date().getTime() + mediaFile.name;
+        let postType = "T";
+        var awsMediaPath = "";
+        
+        if(app.config.mimeTypes.images.indexOf(mediaFile.mimetype)>-1) {
+            postType = "I";
+        } else if(app.config.mimeTypes.videos.indexOf(mediaFile.mimetype)>-1) {
+            postType = "V";
+        } 
+
         console.log("evdfa", uploadPath, mediaFileName, mediaFilePath, mediaFile);
         app.lib.async.auto([
             //move file
             function(cb) {
                 if(!mediaFile)
                     return cb(null);
-                
+    
                     mediaFile.mv(mediaFilePath, cb); 
-                
             },
             //write to s3
-            function (results, cb) {
+            function (cb, results) {
                 if(!mediaFile)
                     return cb(null);
-                
                 
                 var s3 = new app.lib.AWS.S3({apiVersion: '2006-03-01'});
                 var uploadParams = {
                     Bucket: "nk-s3", 
                     Key: mediaFileName, 
                     Body: fs.createReadStream(mediaFilePath),
-                    //ContentType: fileType,
-                   // ACL: 'public-read'
+                    ContentType: mediaFile.mimetype,
+                    ACL: 'public-read'
                 };
 
                 s3.upload (uploadParams, function (err, data) {
                     console.log("asdfadfsa",uploadParams, err, data);
-                    if (err) {
-                      console.log("Error", err);
-                    } if (data) {
-                      console.log("Upload Success", data.Location);
-                    }
-                  });
+                    if(err)
+                        return cb(err);
+                    
+                        awsMediaPath = data.Location;   
+                    fs.unlink(mediaFilePath, function(err){
+                        cb(data);
+                    });    
+                });
             }
         ], function(err, results) {
-            console.log("FINALLL", err, results)
+            var postData = {
+                post_type : postType,
+                post_desc : req.body.txtPost,
+                media_path : awsMediaPath,
+                user_id : (req.session.user && req.session.user.user_id) || 0
+            };
+            console.log("FINALLL", err, results, postData);
+            modelUsers.insert('posts', postData, (err, results)=>{
+                postData.username = req.session.user.username
+                res.render('single_post', postData)
+            });
         });
     }
 

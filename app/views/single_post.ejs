@@ -1,0 +1,27 @@
+<div class="media p-2 pb-4 mb-2 bg-light">
+    <div class="media-body"><img src="http://localhost/thoughts/public/uploads/images/ef89aee5f5b00c1a13d09ba12ee65561.jpg" alt="John Doe" class="mr-3 rounded-circle float-left" style="width:50px;">
+      <h4><%= username %> <small><i>Posted just now</i></small></h4>
+      <% if(post_desc) { %>
+        <p><%= post_desc %></p>
+      <% } %>
+      
+      <% if(post_type=="I") { %>
+        <p><img class="img-fluid" src="<%= media_path %>"></p>
+      <% } %>
+
+      <% if(post_type=="V") { %>
+        <p class="embed-responsive embed-responsive-4by3">
+            <video controls class="embed-responsive-item">
+                <source src="<%= media_path %>" type="video/mp4">
+                <p>Your browser doesn't support HTML5 video</p>
+            </video>
+        </p>
+      <% } %>
+      
+      <div class="d-flex border-top border-bottom">
+        <div class="p-2 text-center flex-fill">Like</div>
+        <div class="p-2 text-center flex-fill">Comment</div>
+        <div class="p-2 text-center flex-fill">Share</div>
+      </div>
+    </div>
+</div>
