@@ -1,12 +1,16 @@
 <div class="media p-2 pb-4 mb-2">
-    <div class="media-body"><img src="http://localhost/thoughts/public/uploads/images/ef89aee5f5b00c1a13d09ba12ee65561.jpg" alt="John Doe" class="mr-3 rounded-circle float-left" style="width:50px;">
-      <h4><%= username %> <small><i>Posted just now</i></small></h4>
+    <div class="media-body">
+      <div>
+        <img src="https://www.w3schools.com/bootstrap4/img_avatar3.png" alt="John Doe" class="mr-3 rounded-circle float-left" style="width:45px;" />
+        <h4 class="mb-0"><%= username %>nilsomeone</h4>
+        <span class="text-muted small">Posted just now</span>
+      </div>
       <% if(post_desc) { %>
-        <p><%= post_desc %></p>
+        <p class="mt-2"><%= post_desc %></p>
       <% } %>
       
       <% if(post_type=="I") { %>
-        <p><img class="img-fluid" src="<%= media_path %>"></p>
+        <p class="<%= post_desc ? 'mt-2' : '' %>"><img class="img-fluid" src="<%= media_path %>"></p>
       <% } %>
 
       <% if(post_type=="V") { %>
@@ -18,9 +22,9 @@
         </p>
       <% } %>
       
-      <div class="d-flex border-top border-bottom">
+      <div class="d-flex border-top border-bottom mb-3">
         <div class="p-2 text-center flex-fill">
-          <a href="#" class="btnPostLike" data-postid="<%= post_id %>" data-likecount="<%= like_count %>">Like <span class="font-weight-bold text-secondary"><%= like_count %></span></a> 
+          <a href="<%= app.config.host + '/like/' + post_id %>" class="btnPostLike" data-postid="<%= post_id %>" data-likecount="<%= like_count %>">Like <span class="font-weight-bold text-secondary"><%= like_count %></span></a> 
         </div>
         <div class="p-2 text-center flex-fill">
           <a href="#" class="btnPostComment" data-postid="<%= post_id %>" data-commentcount="<%= comment_count %>">Comment</a> <span class="font-weight-bold text-secondary"><%= comment_count %></span>
@@ -28,5 +32,34 @@
         <div class="p-2 text-center flex-fill">
           <a href="#" class="btnPostShare" data-postid="<%= post_id %>" data-sharecount="<%= share_count %>">Share</a> <span class="font-weight-bold text-secondary"><%= share_count %></span></div>
       </div>
+      <div id="divPostComments_<%= post_id %>" style="display: none;">
+          <form action="<%= app.config.host + '/comment' %>" method="post" class="formPostComment">
+              <textarea placeholder="Write a comment..." rows="2" class="form-control border-0 formTxtComment" name="comment"></textarea>
+              <input type="hidden" value="<%= post_id %>" name="post_id" >
+          </form>  
+        
+          <div class="media p-1">
+            <div class="media-body">
+              <img src="https://www.w3schools.com/bootstrap4/img_avatar3.png" alt="John Doe" class="mr-3 rounded-circle float-left" style="width:40px;">
+              <h5>akshaykumar67 <br><small><i class="small">Posted just now</i></small></h5>
+              <p>Some random awesome comment and text</p>
+            </div>
+          </div>
+          <div class="media p-1">
+            <div class="media-body">
+              <img src="https://www.w3schools.com/bootstrap4/img_avatar3.png" alt="John Doe" class="mr-3 rounded-circle float-left" style="width:40px;">
+              <h5>akshaykumar67 <br><small><i class="small">Posted just now</i></small></h5>
+              <p>Some random awesome comment and text</p>
+            </div>
+          </div>
+          <div class="media p-1">
+            <div class="media-body">
+              <img src="https://www.w3schools.com/bootstrap4/img_avatar3.png" alt="John Doe" class="mr-3 rounded-circle float-left" style="width:40px;">
+              <h5>akshaykumar67 <br><small><i class="small">Posted just now</i></small></h5>
+              <p>Some random awesome comment and text</p>
+            </div>
+          </div>
+      </div>
+      
     </div>
 </div>

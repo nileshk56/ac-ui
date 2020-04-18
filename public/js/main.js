@@ -27,7 +27,7 @@ $( document ).ready(function() {
 
 		// Create an FormData object 
         var data = new FormData(form);
-        alert(data);
+        
         $.ajax({
             type: "POST",
             enctype: 'multipart/form-data',
@@ -40,32 +40,108 @@ $( document ).ready(function() {
             success: function (data) {
                 $( "#frmAddCreatePost" ).fadeTo( "slow", 1 );
                 $("#divPosts").prepend(data);
+                $("#frmAddCreatePost")[0].reset();
             },
             error: function (e) {
                 console.log("ERROR : ", e);
+                $("#frmAddCreatePost")[0].reset();
             }
         });
     });
 
     $(document).on('click', ".btnPostLike", function(event){
-		/*var url = $(this).attr('href');
-		var id = $(this).attr('id');
-		var postId = parseInt(id.split("_")[1]);
-		var likeCount = parseInt($("#likeCount_"+postId).html()) + 1;
-		var dislikeCount = parseInt($("#likeCount_"+postId).html());
-		$.get(url, function(data, status){
-	        $("#like_"+postId).hide();
-	        $("#dislike_"+postId).hide();
-	    	$("#likeCount_"+postId).html("Likes " + likeCount);
-	    	$("#dislikeCount_"+postId).html("Dislikes " + dislikeCount);
-        });*/
-        var postId = parseInt($(this).data("postid"));
+		var postId = parseInt($(this).data("postid"));
         var likeCount = parseInt($(this).data("likecount"));
-        $(this).children("span").html(likeCount +1);
+        var url = $(this).attr('href');
+        console.log("asd", url);
+        $.ajax({
+            type: "GET",
+            url: url,
+            success:  (data) => {
+                $(this).children("span").html(likeCount +1);
+                $(this).removeAttr("href");
+            },
+            error:  (e) => {
+                $(this).removeAttr("href");
+            }
+        });
 
 		return false;
 	});
 
+    $(document).on('click', ".btnPostComment", function(event){
+		var postId = parseInt($(this).data("postid"));
+        $("#divPostComments_"+postId).show();
+		return false;
+    });
+    
+    $('.formTxtComment').keydown(function(event) {
+        if (event.keyCode == 13) {
+            //console.log("a234", $(this.form))
+            //$(this.form).submit()
+            
+            // Get form
+            var form = $(this.form)[0];
+            var data = new FormData();            
+            data.append("post_id", $(form.post_id).val())
+            data.append("comment", $(form.comment).val());
+            $( form ).fadeTo( "slow", 0.33 );
+            var actionurl = form.action;
+
+            var postData = 
+
+            console.log("asdfadsf",actionurl,data, form, $(this.form), $(form.post_id).val(), $(form).serialize())
+
+
+            $.ajax({
+                type: "POST",
+                url: actionurl,
+                data: $(form).serialize(),
+                success: function (data) {
+                    $( form ).fadeTo( "slow", 1 );
+                    $( form ).after(data);
+                    form.reset();
+                },
+                error: function (e) {
+                    console.log("ERROR : ", e);
+                    form.reset();
+                }
+            });
+         }
+    });
+
+    $(".formPostComment").submit(function(e){
+        
+        e.preventDefault();
+        $( this ).fadeTo( "slow", 0.33 );
+
+        //get the action-url of the form
+        var actionurl = e.currentTarget.action;
+
+        // Get form
+        var form = $(this)[0];
+
+		// Create an FormData object 
+        var data = new FormData(form);
+        
+        console.log("dafa", data, actionurl)
+
+        $.ajax({
+            type: "POST",
+            url: actionurl,
+            data: data,
+            success: function (data) {
+                $( form ).fadeTo( "slow", 0.33 );
+                $( form ).prepend(data);
+                form.reset();
+            },
+            error: function (e) {
+                console.log("ERROR : ", e);
+                form.reset();
+            }
+        });
+        return false;
+    });
 
     /*$( "#dob" ).datepicker({
         changeMonth: true,

@@ -110,15 +110,15 @@ class Home extends Base {
     createPost(req, res) {
         console.log("erreq", req.body, req.files);
         let uploadPath = __dirname + "/../../public/" + app.config.uploads.uploadpath + "/";
-        let mediaFile = req.files.filePostsMedia;
-        let mediaFilePath = uploadPath + new Date().getTime() + mediaFile.name;
-        let mediaFileName = new Date().getTime() + mediaFile.name;
+        let mediaFile = req.files && req.files.filePostsMedia;
+        let mediaFilePath = mediaFile && uploadPath + new Date().getTime() + mediaFile.name;
+        let mediaFileName = mediaFile && new Date().getTime() + mediaFile.name;
         let postType = "T";
         var awsMediaPath = "";
         
-        if(app.config.mimeTypes.images.indexOf(mediaFile.mimetype)>-1) {
+        if(mediaFile && app.config.mimeTypes.images.indexOf(mediaFile.mimetype)>-1) {
             postType = "I";
-        } else if(app.config.mimeTypes.videos.indexOf(mediaFile.mimetype)>-1) {
+        } else if(mediaFile && app.config.mimeTypes.videos.indexOf(mediaFile.mimetype)>-1) {
             postType = "V";
         } 
 
@@ -165,7 +165,11 @@ class Home extends Base {
             };
             console.log("FINALLL", err, results, postData);
             modelUsers.insert('posts', postData, (err, results)=>{
-                postData.username = req.session.user.username
+                postData.username = req.session.user.username;
+                postData.post_id = results.insertId;
+                postData.like_count = 0;
+                postData.comment_count = 0;
+                postData.share_count = 0;
                 res.render('single_post', postData)
             });
         });
@@ -284,7 +288,52 @@ class Home extends Base {
         });
     }
 
-    
+    like(req, res){
+        var postId = req.params.postId;
+        var objUserActivities = {
+            user_activity_type : 'LIKE',
+            post_id : postId,
+            user_id : req.session.user.user_id
+        };
+
+        modelUsers.fetch('user_activities', '*', objUserActivities, null, 1, 0, function(err, results){
+            if(results) {
+                return res.status(400).json({status : "FAIL"});
+            }
+            modelUsers.insert('user_activities', objUserActivities);
+            var qr = "update posts set like_count = like_count + 1 where post_id = " + postId;
+            app.db.mysql.query(qr);
+
+            res.json({status : "SUCCESS"});
+        });
+
+    }
+
+    comment(req, res) {
+        var objUserActivities = {
+            user_activity_type : 'COMMENT',
+            post_id : req.body.post_id,
+            comment : req.body.comment,
+            user_id : req.session.user.user_id
+        };
+
+        modelUsers.insert('user_activities', objUserActivities, function(err, results){
+            console.log("here34524", err, results);
+            if(err) 
+                return res.status(400).json({status : "FAIL"});
+            
+            var qr = "update posts set comment_count = comment_count + 1 where post_id = " + req.body.post_id;
+            app.db.mysql.query(qr);
+
+            var commentData = {
+                comment : req.body.comment,
+                username : req.session.user.username,
+                commentTime : "just now"
+            };
+
+            res.render('single_comment', commentData);
+        });
+    }
 
 }
 

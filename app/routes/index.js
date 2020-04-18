@@ -28,6 +28,8 @@ module.exports = function() {
 	app.get('/logout', loginController.logout);*/
 
 	app.get('/', homeController.renderHome);
+	app.get('/like/:postId', homeController.like);
+	app.post("/comment", homeController.comment);
 	app.post("/post", homeController.createPost);
 
 	app.get('/login', loginController.renderLogin);
