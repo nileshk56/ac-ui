@@ -7,8 +7,7 @@ $( document ).ready(function() {
     $('#txtPost').focus();
 
     $('#txtPost')
-    .click(function(){ this.rows=3 })
-    .blur( function(){ this.rows=1 });
+    .click(function(){ this.rows=3 });
 
     $("#btnAddMedia").click(function(){
         $("#filePostsMedia").click();
@@ -50,7 +49,6 @@ $( document ).ready(function() {
     });
 
     $(document).on('click', ".btnPostLike", function(event){
-		var postId = parseInt($(this).data("postid"));
         var likeCount = parseInt($(this).data("likecount"));
         var url = $(this).attr('href');
         console.log("asd", url);
@@ -77,21 +75,13 @@ $( document ).ready(function() {
     
     $('.formTxtComment').keydown(function(event) {
         if (event.keyCode == 13) {
-            //console.log("a234", $(this.form))
-            //$(this.form).submit()
-            
-            // Get form
+            var commentCount = parseInt($(this).data("commentcount"));
             var form = $(this.form)[0];
             var data = new FormData();            
             data.append("post_id", $(form.post_id).val())
             data.append("comment", $(form.comment).val());
             $( form ).fadeTo( "slow", 0.33 );
             var actionurl = form.action;
-
-            var postData = 
-
-            console.log("asdfadsf",actionurl,data, form, $(this.form), $(form.post_id).val(), $(form).serialize())
-
 
             $.ajax({
                 type: "POST",
@@ -100,6 +90,7 @@ $( document ).ready(function() {
                 success: function (data) {
                     $( form ).fadeTo( "slow", 1 );
                     $( form ).after(data);
+                    $(this).children("span").html(commentCount +1);
                     form.reset();
                 },
                 error: function (e) {
@@ -142,6 +133,25 @@ $( document ).ready(function() {
         });
         return false;
     });
+
+    $(document).on('click', ".btnPostShare", function(event){
+		
+        var shareCount = parseInt($(this).data("sharecount"));
+        var url = $(this).attr('href');
+        $.ajax({
+            type: "GET",
+            url: url,
+            success:  (data) => {
+                $(this).children("span").html(shareCount +1);
+                $(this).removeAttr("href");
+            },
+            error:  (e) => {
+                $(this).removeAttr("href");
+            }
+        });
+
+		return false;
+	});
 
     /*$( "#dob" ).datepicker({
         changeMonth: true,

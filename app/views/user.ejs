@@ -2,19 +2,24 @@
 <%- include('header', user) %>
 <div class="container" >
     <div class="row">
-        <div class="col-md-6">
-            <%- include('tabs') %>
+        <div class="col-md-6 mb-2 bg-light pt-4 pb-4 border-top border-bottom">
+            
+            <div class="d-flex ">
+                <div class=""><img src="https://pbs.twimg.com/media/EVnclLMUwAwCC9Z?format=jpg&name=small" alt="John Doe" class="mr-4 rounded-circle float-left" style="width:100px;">
+                    </div>
+                <div class="align-self-center"><h3>John Doe</h3><button class="btn btn-danger">Add Friend</button></div>
+            </div>  
         </div>
     </div>
     <div class="row">
         <div class="col-md-6" id="divPosts">
-
-
-          <% if(posts) {
+            <br>
+            <% if(posts.length) {
             posts.forEach(function(post){ %>
               <%- include('single_post', post); %>
-          <% }) } %>
-
+          <% }) } else { %>
+                <h3>No Posts.</h3>
+            <%}%>  
             <div class="media p-2 pb-4 mb-2 bg-light">
                 <div class="media-body"><img src="http://localhost/thoughts/public/uploads/images/ef89aee5f5b00c1a13d09ba12ee65561.jpg" alt="John Doe" class="mr-3 rounded-circle float-left" style="width:50px;">
                   <h4>John Doe <small><i>Posted on February 19, 2016</i></small></h4>

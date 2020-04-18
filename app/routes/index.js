@@ -1,6 +1,7 @@
 var commonMiddleware = require('../middlewares/common.js')
 var loginController = new (require('../controllers/login.js'))();
 var homeController = new (require('../controllers/home.js'))();
+var userController = new (require('../controllers/user.js'))();
 
 module.exports = function() {
 	
@@ -29,6 +30,7 @@ module.exports = function() {
 
 	app.get('/', homeController.renderHome);
 	app.get('/like/:postId', homeController.like);
+	app.get('/share/:postId', homeController.share);
 	app.post("/comment", homeController.comment);
 	app.post("/post", homeController.createPost);
 
@@ -36,4 +38,6 @@ module.exports = function() {
 	app.post('/login', loginController.signIn);
 	app.post('/signup', loginController.signUp);
 	app.get('/logout', loginController.logout);
+
+	app.get('/user/:username', userController.renderUser)
 };

@@ -161,7 +161,8 @@ class Home extends Base {
                 post_type : postType,
                 post_desc : req.body.txtPost,
                 media_path : awsMediaPath,
-                user_id : (req.session.user && req.session.user.user_id) || 0
+                user_id : (req.session.user && req.session.user.user_id) || 0,
+                username : (req.session.user && req.session.user.username) || ""
             };
             console.log("FINALLL", err, results, postData);
             modelUsers.insert('posts', postData, (err, results)=>{
@@ -293,7 +294,8 @@ class Home extends Base {
         var objUserActivities = {
             user_activity_type : 'LIKE',
             post_id : postId,
-            user_id : req.session.user.user_id
+            user_id : req.session.user.user_id,
+            username : req.session.user.username
         };
 
         modelUsers.fetch('user_activities', '*', objUserActivities, null, 1, 0, function(err, results){
@@ -314,7 +316,8 @@ class Home extends Base {
             user_activity_type : 'COMMENT',
             post_id : req.body.post_id,
             comment : req.body.comment,
-            user_id : req.session.user.user_id
+            user_id : req.session.user.user_id,
+            username : req.session.user.username
         };
 
         modelUsers.insert('user_activities', objUserActivities, function(err, results){
@@ -333,6 +336,23 @@ class Home extends Base {
 
             res.render('single_comment', commentData);
         });
+    }
+
+    share(req, res){
+        var postId = req.params.postId;
+        var objUserActivities = {
+            user_activity_type : 'SHARE',
+            post_id : postId,
+            user_id : req.session.user.user_id,
+            username : req.session.user.username
+        };
+
+        modelUsers.insert('user_activities', objUserActivities);
+        var qr = "update posts set share_count = share_count + 1 where post_id = " + postId;
+        app.db.mysql.query(qr);
+
+        res.json({status : "SUCCESS"});
+        
     }
 
 }

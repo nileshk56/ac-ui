@@ -2,7 +2,7 @@
     <div class="media-body">
       <div>
         <img src="https://www.w3schools.com/bootstrap4/img_avatar3.png" alt="John Doe" class="mr-3 rounded-circle float-left" style="width:45px;" />
-        <h4 class="mb-0"><%= username %>nilsomeone</h4>
+        <a href="<%= app.config.host + '/user/' + username %>" class="text-dark" ><h4 class="mb-0"><%= username %>nilsomeone</h4></a>
         <span class="text-muted small">Posted just now</span>
       </div>
       <% if(post_desc) { %>
@@ -27,10 +27,11 @@
           <a href="<%= app.config.host + '/like/' + post_id %>" class="btnPostLike" data-postid="<%= post_id %>" data-likecount="<%= like_count %>">Like <span class="font-weight-bold text-secondary"><%= like_count %></span></a> 
         </div>
         <div class="p-2 text-center flex-fill">
-          <a href="#" class="btnPostComment" data-postid="<%= post_id %>" data-commentcount="<%= comment_count %>">Comment</a> <span class="font-weight-bold text-secondary"><%= comment_count %></span>
+          <a href="#" class="btnPostComment" data-postid="<%= post_id %>" data-commentcount="<%= comment_count %>">Comment <span class="font-weight-bold text-secondary"><%= comment_count %></span></a>
         </div>
         <div class="p-2 text-center flex-fill">
-          <a href="#" class="btnPostShare" data-postid="<%= post_id %>" data-sharecount="<%= share_count %>">Share</a> <span class="font-weight-bold text-secondary"><%= share_count %></span></div>
+          <a href="<%= app.config.host + '/share/' + post_id %>" class="btnPostShare" data-postid="<%= post_id %>" data-sharecount="<%= share_count %>">Share <span class="font-weight-bold text-secondary"><%= share_count %></span></a>
+        </div>
       </div>
       <div id="divPostComments_<%= post_id %>" style="display: none;">
           <form action="<%= app.config.host + '/comment' %>" method="post" class="formPostComment">
