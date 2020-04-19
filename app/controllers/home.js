@@ -6,33 +6,46 @@ class Home extends Base {
 
     renderHome(req, res) {
         
+        var offset = (req.query.offset && req.query.offset - 1) || 0; 
 
-        var viewData = {
-            user : req.session.user,
-            msg : req.session.msg
-        };
+        //NEW
+        app.lib.async.parallel([
+            function(cb) {
+                //we want to show user lots of new posts if we keep only sort by like_count then user will see same posts
+                //save above sortby in session so for further more/pagination request we will show him the sorted posts
+                //this sortby stored in session is used in renderPosts()
+                var sortBy = (Math.floor(Math.random()*10) % 2 == 0) ? "like_count" : "created";
+                req.session.postsSortBy = {[sortBy] : "DESC"};
 
-        //we want to show user lots of new posts if we keep only sort by like_count then user will see same posts
-        //save above sortby in session so for further more/pagination request we will show him the sorted posts
-        //this sortby stored in session is used in renderPosts()
-        var sortBy = (Math.floor(Math.random()*10) % 2 == 0) ? "like_count" : "created";
-        req.session.postsSortBy = {[sortBy] : "DESC"};
-
-        var qr = "select * from posts p, users u where p.user_id = u.user_id order by p."+sortBy+" desc limit 0, 10";
-        console.log("QRR", qr);
-        //modelUsers.fetch('posts', '*', null, req.session.postsSortBy, 10, 0, function(err, results){
-        app.db.mysql.query(qr, function(err, results){
-
+                var qr = "select * from posts p, users u where p.user_id = u.user_id order by p."+sortBy+" desc limit " + offset + ", 1";
+                console.log("homeq", qr);
+                app.db.mysql.query(qr, cb);
+            },
+            function(cb) {
+                modelUsers.fetch('user_activities', '*', {user_id : req.session.user.user_id}, {created:"desc"}, 10, offset, cb);
+            }
+        ],
+        function(err, results) {
+            
+            var posts = results[0][0] || [];
+            
+            if(results[1] && results[1].length) {
+                posts.concat(results[1][0]);
+            }
+            
             var viewData = {
-                posts : results,
                 user : req.session.user,
-                msg : req.session.msg
+                msg : (req.session.msg && req.session.msg.body) || '',
+                posts : posts    
             };
+              
+            if(offset) {
+                res.render('posts_pagination', viewData);
+            } else {
+                res.render('home', viewData);
+            }
+        });
 
-            console.log("asdfad",viewData)
-
-            res.render('home', viewData);
-        })
     }
 
     renderKYC(req, res) {

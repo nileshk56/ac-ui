@@ -151,7 +151,19 @@ $( document ).ready(function() {
         });
 
 		return false;
-	});
+    });
+    
+    $("#btnLoadMorePosts").click(function(){
+        var offset = parseInt($(this).data("offset"));
+        var limit = 1;
+        $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
+        $.get('/?offset='+offset, function(data){
+            $("#divPosts").append(data);
+            offset += limit;
+            $("#btnLoadMorePosts").html("Load More");
+            $("#btnLoadMorePosts").data("offset", offset)
+        });
+    });
 
     /*$( "#dob" ).datepicker({
         changeMonth: true,

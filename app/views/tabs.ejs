@@ -1,6 +1,6 @@
 <% if (msg) { %>
   <br>
-  <div class="alert alert-success alert-dismissible text-center">
+  <div class="alert alert-danger alert-dismissible text-center">
       <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
       <b><%= msg %></b>
   </div>
@@ -9,7 +9,7 @@
 <form action="<%= app.config.host%>/post" method="post" id="frmAddCreatePost" class="mb-4" enctype="multipart/form-data">
   <div class="form-group">
   <label for="comment" class="h3 font-weight-bold">Create Post</label>
-  <textarea class="form-control border-0  p-2" rows="1" id="txtPost" name="txtPost" placeholder="Write Your Post here" required></textarea>
+  <textarea class="form-control border-0  p-2" rows="1" id="txtPost" name="txtPost" placeholder="Write Your Post here"></textarea>
   </div>
   <div class="d-flex justify-content-between mb-3">
     <div>

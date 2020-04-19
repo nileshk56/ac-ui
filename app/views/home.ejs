@@ -9,49 +9,16 @@
     <div class="row">
         <div class="col-md-6" id="divPosts">
 
-
           <% if(posts) {
             posts.forEach(function(post){ %>
               <%- include('single_post', post); %>
-          <% }) } %>
-
-            <div class="media p-2 pb-4 mb-2 bg-light">
-                <div class="media-body"><img src="http://localhost/thoughts/public/uploads/images/ef89aee5f5b00c1a13d09ba12ee65561.jpg" alt="John Doe" class="mr-3 rounded-circle float-left" style="width:50px;">
-                  <h4>John Doe <small><i>Posted on February 19, 2016</i></small></h4>
-                  <p>some Random text again some random text</p>
-                  <p><img class="img-fluid" src="https://pbs.twimg.com/media/EVnclLMUwAwCC9Z?format=jpg&name=small"></p>
-                  <div class="d-flex border-top border-bottom">
-                    <div class="p-2 text-center flex-fill">Like</div>
-                    <div class="p-2 text-center flex-fill">Comment</div>
-                    <div class="p-2 text-center flex-fill">Share</div>
-                  </div>
-                </div>
-            </div>
-
-            <div class="media p-2 pb-4 mb-2">
-                <div class="media-body"><img src="http://localhost/thoughts/public/uploads/images/ef89aee5f5b00c1a13d09ba12ee65561.jpg" alt="John Doe" class="mr-3 rounded-circle float-left" style="width:50px;">
-                  <h4>John Doe <small><i>Posted on February 19, 2016</i></small></h4>
-                  <p>some Random text again some random text some Random text again some random text some Random text again some random text some Random text again some random text</p>
-                  <div class="d-flex border-top border-bottom">
-                    <div class="p-2 text-center flex-fill">Like</div>
-                    <div class="p-2 text-center flex-fill">Comment</div>
-                    <div class="p-2 text-center flex-fill">Share</div>
-                  </div>
-                </div>
-            </div>
+          <% }) } %>  
             
-            <div class="media p-2 pb-4 mb-2">
-                <div class="media-body"><img src="http://localhost/thoughts/public/uploads/images/ef89aee5f5b00c1a13d09ba12ee65561.jpg" alt="John Doe" class="mr-3 rounded-circle float-left" style="width:50px;">
-                  <h4>John Doe <small><i>Posted on February 19, 2016</i></small></h4>
-                  <p>some Random text again some random text</p>
-                  <p><img class="img-fluid" src="https://pbs.twimg.com/media/EVnclLMUwAwCC9Z?format=jpg&name=small"></p>
-                  <div class="d-flex border-top border-bottom">
-                    <div class="p-2 text-center flex-fill">Like</div>
-                    <div class="p-2 text-center flex-fill">Comment</div>
-                    <div class="p-2 text-center flex-fill">Share</div>
-                  </div>
-                </div>
-            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 text-center">
+          <a class="btn btn-danger pl-5 pr-5 text-light" id="btnLoadMorePosts" data-offset="2">Load More</a>
         </div>
     </div>
 </div>

@@ -1,0 +1,4 @@
+<% if(posts) {
+    posts.forEach(function(post){ %>
+      <%- include('single_post', post); %>
+  <% }) } %>
