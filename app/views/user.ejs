@@ -1,3 +1,4 @@
+<%if(offset==0) {%>
 <%- include('head') %>
 <%- include('header', user) %>
 <div class="container" >
@@ -7,7 +8,12 @@
             <div class="d-flex ">
                 <div class=""><img src="https://pbs.twimg.com/media/EVnclLMUwAwCC9Z?format=jpg&name=small" alt="John Doe" class="mr-4 rounded-circle float-left" style="width:100px;">
                     </div>
-                <div class="align-self-center"><h3>John Doe</h3><button class="btn btn-danger">Add Friend</button></div>
+                <div class="align-self-center">
+                    <h3><%= username %></h3>
+                    <% if(user) {%>
+                    <a href="<%= app.config.host + '/user/' + username + '/sendfriendrequest' %>" class="btn btn-danger" id="btnFriendRequest" data-ops="SEND">Add Friend</a>
+                    <% } %>
+                </div>
             </div>  
         </div>
     </div>
@@ -17,49 +23,30 @@
             <% if(posts.length) {
             posts.forEach(function(post){ %>
               <%- include('single_post', post); %>
+
           <% }) } else { %>
                 <h3>No Posts.</h3>
             <%}%>  
-            <div class="media p-2 pb-4 mb-2 bg-light">
-                <div class="media-body"><img src="http://localhost/thoughts/public/uploads/images/ef89aee5f5b00c1a13d09ba12ee65561.jpg" alt="John Doe" class="mr-3 rounded-circle float-left" style="width:50px;">
-                  <h4>John Doe <small><i>Posted on February 19, 2016</i></small></h4>
-                  <p>some Random text again some random text</p>
-                  <p><img class="img-fluid" src="https://pbs.twimg.com/media/EVnclLMUwAwCC9Z?format=jpg&name=small"></p>
-                  <div class="d-flex border-top border-bottom">
-                    <div class="p-2 text-center flex-fill">Like</div>
-                    <div class="p-2 text-center flex-fill">Comment</div>
-                    <div class="p-2 text-center flex-fill">Share</div>
-                  </div>
-                </div>
-            </div>
-
-            <div class="media p-2 pb-4 mb-2">
-                <div class="media-body"><img src="http://localhost/thoughts/public/uploads/images/ef89aee5f5b00c1a13d09ba12ee65561.jpg" alt="John Doe" class="mr-3 rounded-circle float-left" style="width:50px;">
-                  <h4>John Doe <small><i>Posted on February 19, 2016</i></small></h4>
-                  <p>some Random text again some random text some Random text again some random text some Random text again some random text some Random text again some random text</p>
-                  <div class="d-flex border-top border-bottom">
-                    <div class="p-2 text-center flex-fill">Like</div>
-                    <div class="p-2 text-center flex-fill">Comment</div>
-                    <div class="p-2 text-center flex-fill">Share</div>
-                  </div>
-                </div>
-            </div>
             
-            <div class="media p-2 pb-4 mb-2">
-                <div class="media-body"><img src="http://localhost/thoughts/public/uploads/images/ef89aee5f5b00c1a13d09ba12ee65561.jpg" alt="John Doe" class="mr-3 rounded-circle float-left" style="width:50px;">
-                  <h4>John Doe <small><i>Posted on February 19, 2016</i></small></h4>
-                  <p>some Random text again some random text</p>
-                  <p><img class="img-fluid" src="https://pbs.twimg.com/media/EVnclLMUwAwCC9Z?format=jpg&name=small"></p>
-                  <div class="d-flex border-top border-bottom">
-                    <div class="p-2 text-center flex-fill">Like</div>
-                    <div class="p-2 text-center flex-fill">Comment</div>
-                    <div class="p-2 text-center flex-fill">Share</div>
-                  </div>
-                </div>
-            </div>
         </div>
     </div>
+
+    <% if(posts.length) { %>
+    <div class="row">
+        <div class="col-md-6 text-center">
+            <a href="<%= app.config.host + '/user/' + username %>" class="btn btn-danger pl-5 pr-5 text-light" id="btnLoadMoreUserPosts" data-offset="2">Load more posts</a>
+        </div>
+    </div>
+    <% } %>
+
 </div>
 <br>    
-
 <%- include('footer') %>
+<%} else {%>
+
+    <% if(posts.length) {
+        posts.forEach(function(post){ %>
+          <%- include('single_post', post); %>
+      <% }) } %>  
+
+<%}%>

@@ -14,14 +14,22 @@ class Home extends Base {
                 //we want to show user lots of new posts if we keep only sort by like_count then user will see same posts
                 //save above sortby in session so for further more/pagination request we will show him the sorted posts
                 //this sortby stored in session is used in renderPosts()
-                var sortBy = (Math.floor(Math.random()*10) % 2 == 0) ? "like_count" : "created";
-                req.session.postsSortBy = {[sortBy] : "DESC"};
+                //if !offset means its first page and set the session for sort order
+                if(!offset) {
+                    req.session.postsSortBy = (Math.floor(Math.random()*10) % 2 == 0) ? "like_count" : "created";
+                }
 
-                var qr = "select * from posts p, users u where p.user_id = u.user_id order by p."+sortBy+" desc limit " + offset + ", 1";
+                var qr = "select * from posts p, users u where p.user_id = u.user_id order by p."+ req.session.postsSortBy +" desc limit " + offset + ", 1";
                 console.log("homeq", qr);
                 app.db.mysql.query(qr, cb);
             },
             function(cb) {
+                //page should be loaded for non logged in user as well and for non logged in user there are no activitis
+                if(!req.session.user) {
+                    return cb(null)
+                }
+
+                //fetch activities for logged in user
                 modelUsers.fetch('user_activities', '*', {user_id : req.session.user.user_id}, {created:"desc"}, 10, offset, cb);
             }
         ],
@@ -364,8 +372,27 @@ class Home extends Base {
         var qr = "update posts set share_count = share_count + 1 where post_id = " + postId;
         app.db.mysql.query(qr);
 
-        res.json({status : "SUCCESS"});
-        
+        res.json({status : "SUCCESS"});   
+    }
+
+    search(req, res) {
+        var search = req.query.search;
+        var offset = req.query.offset ? req.query.offset-1 : 0;
+
+        var qr = 'select * from users where username like "%'+search+'%" limit '+offset+', 1';
+        console.log("QR", qr);
+        app.db.mysql.query(qr, function(err, results){
+
+            var viewData = {
+                user : req.session.user,
+                msg : (req.session.msg && req.session.msg.body) || '',
+                users : results,
+                offset : offset,
+                searchTxt : search    
+            }
+            res.render('search', viewData);
+
+        });
     }
 
 }

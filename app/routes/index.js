@@ -29,6 +29,7 @@ module.exports = function() {
 	app.get('/logout', loginController.logout);*/
 
 	app.get('/', homeController.renderHome);
+	app.get('/search', homeController.search);
 	app.get('/like/:postId', homeController.like);
 	app.get('/share/:postId', homeController.share);
 	app.post("/comment", homeController.comment);
@@ -39,5 +40,7 @@ module.exports = function() {
 	app.post('/signup', loginController.signUp);
 	app.get('/logout', loginController.logout);
 
+	app.get('/user/:username/sendfriendrequest', userController.sendfriendrequest);
+	app.get('/user/:username/deletefriendrequest', userController.deletefriendrequest)
 	app.get('/user/:username', userController.renderUser)
 };

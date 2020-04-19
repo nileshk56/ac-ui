@@ -165,6 +165,59 @@ $( document ).ready(function() {
         });
     });
 
+    //$("#btnFriendRequest").click(function(){
+    $(document).on('click', "#btnFriendRequest", function(event){    
+        var ops = $(this).data('ops');
+        var url = $(this).attr('href');
+        var btnFriendRequest = $(this);
+        console.log("URL", url)
+        if(ops == "SEND") {
+            $.get(url, function(){
+                btnFriendRequest.data('ops', 'CANCEL');
+                btnFriendRequest.html('Cancel friend request');
+                url = url.replace('sendfriendrequest', 'deletefriendrequest');
+                console.log("URL1", url)
+                btnFriendRequest.attr('href', url);
+            });
+        } else if (ops == "CANCEL") {
+            $.get(url, function(){
+                btnFriendRequest.data('ops', 'SEND');
+                btnFriendRequest.html('Add Friend');
+                url = url.replace('deletefriendrequest', 'sendfriendrequest');
+                console.log("URL2", url)
+                btnFriendRequest.attr('href', url);
+            });
+        }
+        return false;
+    });
+
+    $("#btnLoadMoreUsers").click(function(){
+        var offset = parseInt($(this).data("offset"));
+        var search = $(this).data("search");
+        var limit = 1;
+        $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
+        $.get('/search?search='+search+'&offset='+offset, function(data){
+            $("#divUsers").append(data);
+            offset += limit;
+            $("#btnLoadMoreUsers").html("Load more users");
+            $("#btnLoadMoreUsers").data("offset", offset)
+        });
+    });
+
+    $("#btnLoadMoreUserPosts").click(function(){
+        var offset = parseInt($(this).data("offset"));
+        var limit = 1;
+        var url = $(this).attr('href');
+        $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
+        $.get(url+'?offset='+offset, function(data){
+            $("#divPosts").append(data);
+            offset += limit;
+            $("#btnLoadMoreUserPosts").html("Load more posts");
+            $("#btnLoadMoreUserPosts").data("offset", offset)
+        });
+        return false;
+    });
+
     /*$( "#dob" ).datepicker({
         changeMonth: true,
         changeYear: true,

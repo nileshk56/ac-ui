@@ -46,7 +46,13 @@ class Base {
         app.db.mysql.query(`UPDATE ${table} SET ? WHERE ?`, [objValues, ObjWhere], cb);
     }
 
-    delete(table, where, cb) {
+    delete(table, ObjWhere, cb) {
+        console.log("DELETE",table, ObjWhere)
+        app.db.mysql.query(`DELETE FROM ${table} WHERE ?`, [ObjWhere], cb);
+    }
+
+    delete2(table, where, cb) {
+        var qr = `DELETE FROM ${table}` ;
         if(!app.lib._.isEmpty(where)) {
             qr += ` WHERE `;
 
@@ -60,7 +66,10 @@ class Base {
             }
 
             qr = qr.slice(0,-3);
+            console.log("DELETEQR", QR)
+            app.db.mysql.query(`D ${table} SET ? WHERE ?`, [objValues, ObjWhere], cb);
         }
+        cb(null);
     } 
 }
 

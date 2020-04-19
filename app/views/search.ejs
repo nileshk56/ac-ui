@@ -1,0 +1,35 @@
+<%if(offset==0) {%>
+<%- include('head') %>
+<%- include('header', user) %>
+<div class="container" >
+    
+    <div class="row">
+        <div class="col-md-6" id="divUsers">
+            
+          <% if(users) {
+            users.forEach(function(user){ %>
+                <img src="https://www.w3schools.com/bootstrap4/img_avatar3.png" alt="John Doe" class="mr-3 rounded-circle float-left" style="width:40px;">
+                <h5 class="mt-2"><%= user.username %></h5>
+                <br>
+                <hr>
+          <% }) } %>  
+            
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 text-center">
+          <a class="btn btn-danger pl-5 pr-5 text-light" id="btnLoadMoreUsers" data-offset="2" data-search="<%= searchTxt %>">Load more users</a>
+        </div>
+    </div>
+</div>
+<br>    
+<%- include('footer') %>
+<% } else {%>
+<% if(users) {
+    users.forEach(function(user){ %>
+        <img src="https://www.w3schools.com/bootstrap4/img_avatar3.png" alt="John Doe" class="mr-3 rounded-circle float-left" style="width:40px;">
+        <h5 class="mt-2"><%= user.username %></h5>
+        <br>
+        <hr>
+    <% }) } %>  
+<% } %>

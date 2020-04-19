@@ -9,10 +9,10 @@ class User extends Base {
         
         app.lib.async.parallel([
             function(cb) {
-                modelUsers.fetch('posts', '*', {username : username}, {created:"desc"}, 5, offset, cb);
+                modelUsers.fetch('posts', '*', {username : username}, {created:"desc"}, 1, offset, cb);
             },
             function(cb) {
-                modelUsers.fetch('user_activities', '*', {username : username}, {created:"desc"}, 5, offset, cb);
+                modelUsers.fetch('user_activities', '*', {username : username}, {created:"desc"}, 1, offset, cb);
             }
         ],
         function(err, results) {
@@ -24,11 +24,43 @@ class User extends Base {
             var viewData = {
                 user : req.session.user,
                 msg : req.session.msg,
-                posts : posts    
+                posts : posts,
+                username : username,
+                offset : offset    
             };
             console.log("asdfad", viewData, results);   
             res.render('user', viewData);
         });
+    }
+
+    sendfriendrequest(req, res) {
+        
+        var objFriendRequest = {
+            friendship_status : 'SEND',
+            from_username : req.session.user.username,
+            to_username : req.params.username
+        };
+
+        modelUsers.insert('friends', objFriendRequest);
+
+        res.json({status:"SUCCESS"});
+    }
+
+    deletefriendrequest(req, res) {
+        
+        /*var objFriendRequest = {
+            from_username : req.session.user.username,
+            to_username : req.params.username
+        };
+
+        console.log("objFriendRequest", objFriendRequest);
+
+        modelUsers.delete('friends', objFriendRequest);*/
+
+        var qr = "DELETE FROM friends where from_username='"+req.session.user.username+"' and to_username='"+req.params.username+"'";
+        app.db.mysql.query(qr);
+
+        res.json({status:"SUCCESS"});
     }
 }
 
