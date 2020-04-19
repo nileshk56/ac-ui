@@ -34,11 +34,27 @@ class Login extends Base {
                 return res.redirect('/login');
             }
 
-
             req.session.user = results[0];
         
-            res.redirect('/');
 
+            app.lib.async.parallel([
+                //prepare notification count
+                function(cb) {
+                    var qr = "SELECT count(*) as NOTIFICATION_COUNT from friends where friendship_status = 'SEND' and to_username = '" + req.session.user.username + "'";
+                    app.db.mysql.query(qr, function(err, results){
+                        console.log("nrere", results, qr);
+                        req.session.user.notificationCount = results[0] && results[0]['NOTIFICATION_COUNT'];
+                        cb(null)
+                    });
+                }
+            ], function(err) {
+                if(err)
+                    return res.redirect('/error');
+                
+                res.redirect('/');
+            });
+
+            
             /*app.lib.async.parallel([
                 //load kyc data
                 function(cb) {

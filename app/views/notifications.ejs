@@ -1,0 +1,35 @@
+<%- include('head') %>
+<%- include('header', user) %>
+<div class="container" >
+    
+    
+    
+    <div class="row">
+        <div class="col-md-6" id="divPosts">
+            <h3>Pending friend requests</h3>
+            <hr />  
+            <% if(users) {
+                users.forEach(function(user){ %>
+                    <div class="d-flex justify-content-between mb-3">
+                        <div class="col-md-5 p-0">
+                            <img src="https://www.w3schools.com/bootstrap4/img_avatar3.png" alt="<%= user.username %>" class="mr-2 rounded-circle float-left" style="width:40px;">
+                            <h5 class="mt-2"><%= user.username %></h5>
+                        </div>
+                        <div class="col-md-7 pr-0 align-self-center text-right" id="frActions">
+                            <a href="<%= app.config.host + '/updatefriendrequest?fraction=CONFIRM&frid=' + user.user_friend_id %>" class="btn btn-danger text-light p-2">Confirm</a> <a href="<%= app.config.host + '/updatefriendrequest?fraction=REJECT&frid=' + user.user_friend_id %>" class="btn btn-danger text-light p-2">Reject</a> 
+                        </div>
+                      </div>
+                    
+                    <br>
+                    <hr>
+            <% }) } else {%>
+                <h4>No Pending requests</h4>
+            <% } %>  
+            
+        </div>
+    </div>
+    
+</div>
+<br>    
+
+<%- include('footer') %>

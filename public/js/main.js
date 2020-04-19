@@ -218,6 +218,14 @@ $( document ).ready(function() {
         return false;
     });
 
+    $("#frActions a").click(function(){
+        var url = $(this).attr('href');
+        $.get(url, function(data){
+            $("#frActions").html("<b>"+data.status+"</b>")
+        })
+        return false;
+    });
+
     /*$( "#dob" ).datepicker({
         changeMonth: true,
         changeYear: true,

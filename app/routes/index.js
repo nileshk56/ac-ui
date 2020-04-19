@@ -30,6 +30,8 @@ module.exports = function() {
 
 	app.get('/', homeController.renderHome);
 	app.get('/search', homeController.search);
+	app.get('/notifications', homeController.notifications);
+	app.get('/updatefriendrequest', homeController.updatefriendrequest);
 	app.get('/like/:postId', homeController.like);
 	app.get('/share/:postId', homeController.share);
 	app.post("/comment", homeController.comment);

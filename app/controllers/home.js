@@ -395,6 +395,37 @@ class Home extends Base {
         });
     }
 
+    notifications(req, res){
+        
+        var qr = 'SELECT * FROM users u, friends f where u.username = f.from_username and f.friendship_status="SEND" and f.to_username="'+req.session.user.username+'" order by f.created desc limit 100';
+        console.log("asdfasdf",qr)
+        app.db.mysql.query(qr, function(err, results){
+            console.log("asdfasdf",qr, results, err)
+            var viewData = {
+                user : req.session.user,
+                msg : (req.session.msg && req.session.msg.body) || '',
+                users : results   
+            }
+            res.render('notifications', viewData);
+        });
+    }
+
+    updatefriendrequest(req, res){
+        var frId = req.query.frid;
+        var frAction = req.query.fraction;
+
+        if(frAction == "CONFIRM") {
+            modelUsers.update('friends', {"friendship_status":"CONFIRM"}, {user_friend_id : frId});
+            res.json({"status" : "Confirmed"});
+        }
+
+        if(frAction == "REJECT") {
+            var qr = "DELETE FROM friends where user_friend_id = " + frId;
+            app.db.mysql.query(qr);
+            res.json({"status" : "Rejected"});
+        }
+    }
+
 }
 
 module.exports = Home;
