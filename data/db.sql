@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 18, 2020 at 02:29 PM
+-- Generation Time: Apr 20, 2020 at 12:30 PM
 -- Server version: 5.6.35
 -- PHP Version: 7.1.1
 
@@ -17,6 +17,30 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `friends`
+--
+
+CREATE TABLE `friends` (
+  `user_friend_id` bigint(20) NOT NULL,
+  `from_username` varchar(50) NOT NULL,
+  `to_username` varchar(50) NOT NULL,
+  `friendship_status` enum('SENT','CONFIRM','','') NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `friends`
+--
+
+INSERT INTO `friends` (`user_friend_id`, `from_username`, `to_username`, `friendship_status`, `created`) VALUES
+(7, 'n1', 'nilesh33', 'CONFIRM', '2020-04-20 07:59:26'),
+(9, 'n1', 'nilesh22', 'CONFIRM', '2020-04-20 09:07:29'),
+(10, 'nilesh22', 'n1', 'CONFIRM', '2020-04-20 09:07:52'),
+(11, 'nilesh33', 'n1', 'CONFIRM', '2020-04-20 09:08:11');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `posts`
 --
 
@@ -26,6 +50,7 @@ CREATE TABLE `posts` (
   `post_desc` text,
   `media_path` varchar(256) DEFAULT NULL,
   `user_id` bigint(20) DEFAULT NULL,
+  `username` varchar(50) DEFAULT NULL,
   `popular_index` bit(11) DEFAULT NULL,
   `is_published` int(11) DEFAULT NULL,
   `like_count` int(11) NOT NULL DEFAULT '0',
@@ -39,15 +64,11 @@ CREATE TABLE `posts` (
 -- Dumping data for table `posts`
 --
 
-INSERT INTO `posts` (`post_id`, `post_type`, `post_desc`, `media_path`, `user_id`, `popular_index`, `is_published`, `like_count`, `comment_count`, `share_count`, `tags`, `created`) VALUES
-(1, 'I', 'some post text here', '', 1, NULL, NULL, 0, 0, 0, NULL, '2020-04-18 06:32:14'),
-(2, 'I', 'very good', 'https://nk-s3.s3.amazonaws.com/ac/uploads/1587192749135DSC_0464.JPG', 1, NULL, NULL, 0, 0, 0, NULL, '2020-04-18 06:53:18'),
-(3, 'I', 'some text ehre', 'https://nk-s3.s3.amazonaws.com/ac/uploads/1587193084326DSC_0445.JPG', 1, NULL, NULL, 0, 0, 0, NULL, '2020-04-18 06:58:39'),
-(4, 'I', 'some again teext heree\r\n', 'https://nk-s3.s3.amazonaws.com/ac/uploads/1587193250334DSC_0453.JPG', 1, NULL, NULL, 0, 0, 0, NULL, '2020-04-18 07:01:34'),
-(5, 'I', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\r\n\r\n', '', 1, NULL, NULL, 0, 0, 0, NULL, '2020-04-18 10:18:38'),
-(6, 'I', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'https://nk-s3.s3.amazonaws.com/ac/uploads/158720523084820170722_104415.jpg', 1, NULL, NULL, 0, 0, 0, NULL, '2020-04-18 10:20:38'),
-(7, 'I', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'https://nk-s3.s3.amazonaws.com/ac/uploads/158720528647520170722_104415.jpg', 1, NULL, NULL, 0, 0, 0, NULL, '2020-04-18 10:21:28'),
-(8, 'T', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', '', 1, NULL, NULL, 1, 5, 0, NULL, '2020-04-18 10:38:02');
+INSERT INTO `posts` (`post_id`, `post_type`, `post_desc`, `media_path`, `user_id`, `username`, `popular_index`, `is_published`, `like_count`, `comment_count`, `share_count`, `tags`, `created`) VALUES
+(1, 'I', 'Turn the nav menu into navigation tabs with the .nav-tabs class. Add the .active class to the active/current link. If you want the tabs to be togglable, see the last example on this page.\r\n\r\n', 'https://nk-s3.s3.amazonaws.com/ac/uploads/1587223984359Cartoon-Network-1000x563.jpg', 1, 'n1', NULL, NULL, 1, 0, 0, NULL, '2020-04-18 15:33:08'),
+(2, 'T', 'For 50 years, WWF has been protecting the future of nature. The world\'s leading conservation organization, WWF works in 100 countries and is supported by 1.2 million members in the United States and close to 5 million globally.\r\n\r\n', '', 2, 'nilesh22', NULL, NULL, 0, 0, 0, NULL, '2020-04-19 06:12:58'),
+(3, 'I', '', 'https://nk-s3.s3.amazonaws.com/ac/uploads/1587277834454unnamed.jpg', 2, 'nilesh22', NULL, NULL, 0, 0, 1, NULL, '2020-04-19 06:30:37'),
+(4, 'T', 'Display headings are used to stand out more than normal headings (larger font-size and lighter font-weight), and there are four classes to choose from: .display-1, .display-2, .display-3, .display-4\r\n\r\nIn Bootstrap 4 the HTML <small> element is used to create a lighter, secondary text in any heading:\r\n\r\nFor 50 years, WWF has been protecting the future of nature. The world\'s leading conservation organization, WWF works in 100 countries and is supported by 1.2 million members in the United States and close to 5 million globally.\r\n\r\nFor 50 years, WWF has been protecting the future of nature. The world\'s leading conservation organization, WWF works in 100 countries and is supported by 1.2 million members in the United States and close to 5 million globally.\r\n\r\n', '', 2, 'nilesh22', NULL, NULL, 0, 0, 0, NULL, '2020-04-19 06:31:38');
 
 -- --------------------------------------------------------
 
@@ -70,7 +91,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `username`, `password`, `gender`, `dob`, `image`, `created`) VALUES
-(1, 'n1', 'n1', 'M', NULL, NULL, '2020-04-17 15:15:00');
+(1, 'n1', 'n1', 'M', NULL, NULL, '2020-04-17 15:15:00'),
+(2, 'nilesh22', 'nilesh22', 'M', NULL, NULL, '2020-04-18 15:49:32'),
+(3, 'nilesh33', 'nilesh33', 'M', NULL, NULL, '2020-04-20 07:29:42');
 
 -- --------------------------------------------------------
 
@@ -82,6 +105,7 @@ CREATE TABLE `user_activities` (
   `user_activity_id` bigint(20) NOT NULL,
   `user_activity_type` enum('LIKE','COMMENT','SHARE','TAG') NOT NULL,
   `user_id` bigint(20) NOT NULL,
+  `username` varchar(50) DEFAULT NULL,
   `post_id` bigint(20) NOT NULL,
   `comment` text,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -91,19 +115,20 @@ CREATE TABLE `user_activities` (
 -- Dumping data for table `user_activities`
 --
 
-INSERT INTO `user_activities` (`user_activity_id`, `user_activity_type`, `user_id`, `post_id`, `comment`, `created`) VALUES
-(1, 'LIKE', 1, 4, NULL, '2020-04-18 07:02:57'),
-(2, 'LIKE', 1, 8, NULL, '2020-04-18 10:38:16'),
-(3, 'COMMENT', 1, 8, 'a', '2020-04-18 12:20:22'),
-(4, 'COMMENT', 1, 8, 'a', '2020-04-18 12:21:37'),
-(5, 'COMMENT', 1, 8, 'a', '2020-04-18 12:22:46'),
-(6, 'COMMENT', 1, 8, 'nilesh kangane is going to be billinaire', '2020-04-18 12:23:40'),
-(7, 'COMMENT', 1, 8, 'nice', '2020-04-18 12:28:03'),
-(8, 'COMMENT', 1, 8, 'my perfect comment', '2020-04-18 12:28:33');
+INSERT INTO `user_activities` (`user_activity_id`, `user_activity_type`, `user_id`, `username`, `post_id`, `comment`, `created`) VALUES
+(1, 'LIKE', 2, 'nilesh22', 1, NULL, '2020-04-20 09:14:57'),
+(2, 'SHARE', 3, 'nilesh33', 3, NULL, '2020-04-20 09:15:20');
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `friends`
+--
+ALTER TABLE `friends`
+  ADD PRIMARY KEY (`user_friend_id`),
+  ADD UNIQUE KEY `from_username` (`from_username`,`to_username`);
 
 --
 -- Indexes for table `posts`
@@ -129,17 +154,22 @@ ALTER TABLE `user_activities`
 --
 
 --
+-- AUTO_INCREMENT for table `friends`
+--
+ALTER TABLE `friends`
+  MODIFY `user_friend_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+--
 -- AUTO_INCREMENT for table `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `post_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `post_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `user_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `user_activities`
 --
 ALTER TABLE `user_activities`
-  MODIFY `user_activity_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `user_activity_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
