@@ -27,8 +27,8 @@
 <% } else {%>
 <% if(users) {
     users.forEach(function(user){ %>
-        <img src="https://www.w3schools.com/bootstrap4/img_avatar3.png" alt="John Doe" class="mr-3 rounded-circle float-left" style="width:40px;">
-        <h5 class="mt-2"><%= user.username %></h5>
+        <a href="<%= app.config.host + '/user/' + user.username%>"><img src="https://www.w3schools.com/bootstrap4/img_avatar3.png" alt="John Doe" class="mr-3 rounded-circle float-left" style="width:40px;">
+        <h5 class="mt-2 text-dark"><%= user.username %></h5></a>
         <br>
         <hr>
     <% }) } %>  

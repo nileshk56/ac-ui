@@ -171,7 +171,7 @@ $( document ).ready(function() {
         var url = $(this).attr('href');
         var btnFriendRequest = $(this);
         console.log("URL", url)
-        if(ops == "SEND") {
+        if(ops == "SENT") {
             $.get(url, function(){
                 btnFriendRequest.data('ops', 'CANCEL');
                 btnFriendRequest.html('Cancel friend request');
@@ -181,7 +181,7 @@ $( document ).ready(function() {
             });
         } else if (ops == "CANCEL") {
             $.get(url, function(){
-                btnFriendRequest.data('ops', 'SEND');
+                btnFriendRequest.data('ops', 'SENT');
                 btnFriendRequest.html('Add Friend');
                 url = url.replace('deletefriendrequest', 'sendfriendrequest');
                 console.log("URL2", url)
@@ -222,6 +222,14 @@ $( document ).ready(function() {
         var url = $(this).attr('href');
         $.get(url, function(data){
             $("#frActions").html("<b>"+data.status+"</b>")
+        })
+        return false;
+    });
+    
+    $("#btnUnfriend").click(function(){
+        var url = $(this).attr('href');
+        $.get(url, function(data){
+            $("#btnUnfriend").hide();
         })
         return false;
     });

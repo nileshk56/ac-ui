@@ -1,4 +1,11 @@
-<% if(posts) {
-    posts.forEach(function(post){ %>
+<% if(user && activities) {
+    activities.forEach(function(post){ %>
       <%- include('single_post', post); %>
   <% }) } %>
+
+  <% if(posts) {
+    posts.forEach(function(post){
+      post.user_activity_type=false;
+  %>
+      <%- include('single_post', post); %>
+  <% }) } %>  

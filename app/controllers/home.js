@@ -30,23 +30,27 @@ class Home extends Base {
                 }
 
                 //fetch activities for logged in user
-                modelUsers.fetch('user_activities', '*', {user_id : req.session.user.user_id}, {created:"desc"}, 10, offset, cb);
+                var qr  = "select ua.user_activity_type, ua.username as ua_username, ua.comment, ua.created, p.*, u.* from user_activities ua, posts p, users u where ua.post_id = p.post_id and p.user_id = u.user_id and ua.username in ('"+req.session.user.friends.join("','")+"') order by ua.created desc limit " +offset + ", 1";
+                console.log("QR2", qr)
+                app.db.mysql.query(qr, cb);
             }
         ],
         function(err, results) {
             
-            var posts = results[0][0] || [];
-            
-            if(results[1] && results[1].length) {
-                posts.concat(results[1][0]);
-            }
+            console.log("FINAL", results);
+
+            var posts = results[0] && results[0][0] || [];
+            var activities = results[1] && results[1][0] || [];
             
             var viewData = {
                 user : req.session.user,
                 msg : (req.session.msg && req.session.msg.body) || '',
-                posts : posts    
+                posts : posts,
+                activities : activities    
             };
-              
+            
+            console.log("HOME viewData", viewData,results)
+
             if(offset) {
                 res.render('posts_pagination', viewData);
             } else {
@@ -320,7 +324,8 @@ class Home extends Base {
         };
 
         modelUsers.fetch('user_activities', '*', objUserActivities, null, 1, 0, function(err, results){
-            if(results) {
+            
+            if(results.length) {
                 return res.status(400).json({status : "FAIL"});
             }
             modelUsers.insert('user_activities', objUserActivities);
@@ -397,7 +402,7 @@ class Home extends Base {
 
     notifications(req, res){
         
-        var qr = 'SELECT * FROM users u, friends f where u.username = f.from_username and f.friendship_status="SEND" and f.to_username="'+req.session.user.username+'" order by f.created desc limit 100';
+        var qr = 'SELECT * FROM users u, friends f where u.username = f.from_username and f.friendship_status="SENT" and f.to_username="'+req.session.user.username+'" order by f.created desc limit 100';
         console.log("asdfasdf",qr)
         app.db.mysql.query(qr, function(err, results){
             console.log("asdfasdf",qr, results, err)
@@ -417,6 +422,17 @@ class Home extends Base {
         if(frAction == "CONFIRM") {
             modelUsers.update('friends', {"friendship_status":"CONFIRM"}, {user_friend_id : frId});
             res.json({"status" : "Confirmed"});
+            
+            modelUsers.fetch('friends', '*', {user_friend_id : frId}, null, 1, 0, function(err, results){
+                var data = results[0];
+                var objInsert = {
+                    friendship_status : "CONFIRM",
+                    to_username : data['from_username'],
+                    from_username : data['to_username']
+                };
+                console.log("dfadsFF", objInsert, results);
+                modelUsers.insert('friends', objInsert)
+            });
         }
 
         if(frAction == "REJECT") {

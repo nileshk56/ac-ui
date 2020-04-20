@@ -10,9 +10,12 @@
                     </div>
                 <div class="align-self-center">
                     <h3><%= username %></h3>
-                    <% if(user) {%>
-                    <a href="<%= app.config.host + '/user/' + username + '/sendfriendrequest' %>" class="btn btn-danger" id="btnFriendRequest" data-ops="SEND">Add Friend</a>
-                    <% } %>
+                    <% if(user) {
+                        if(user.friends.indexOf(username) == -1) {%>
+                    <a href="<%= app.config.host + '/user/' + username + '/sendfriendrequest' %>" class="btn btn-danger" id="btnFriendRequest" data-ops="SENT">Add Friend</a>
+                    <% } else { %>
+                        <a href="<%= app.config.host + '/user/' + username + '/unfriend' %>" class="btn btn-danger" id="btnUnfriend" data-ops="SENT">Unfriend</a>
+                    <% } }%>
                 </div>
             </div>  
         </div>

@@ -40,10 +40,25 @@ class Login extends Base {
             app.lib.async.parallel([
                 //prepare notification count
                 function(cb) {
-                    var qr = "SELECT count(*) as NOTIFICATION_COUNT from friends where friendship_status = 'SEND' and to_username = '" + req.session.user.username + "'";
+                    var qr = "SELECT count(*) as NOTIFICATION_COUNT from friends where friendship_status = 'SENT' and to_username = '" + req.session.user.username + "'";
                     app.db.mysql.query(qr, function(err, results){
                         console.log("nrere", results, qr);
                         req.session.user.notificationCount = results[0] && results[0]['NOTIFICATION_COUNT'];
+                        cb(null)
+                    });
+                },
+                //fetch all friends
+                function(cb) {
+                    var qr = "SELECT from_username FROM friends where to_username = '" + req.session.user.username + "'";
+                    console.log("asdf",qr);
+                    app.db.mysql.query(qr, function(err, results){
+                        var arrFriends = [];
+                        for(var i = 0 ; i<results.length; i++) {
+                            arrFriends.push(results[i]["from_username"])
+                        }
+                        req.session.user.friends = arrFriends;
+                        console.log("nrere", arrFriends,results, qr);
+                        
                         cb(null)
                     });
                 }

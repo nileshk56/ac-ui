@@ -30,7 +30,7 @@ module.exports = function() {
 
 	app.get('/', homeController.renderHome);
 	app.get('/search', homeController.search);
-	app.get('/notifications', homeController.notifications);
+	app.get('/notifications', commonMiddleware.isLoggedIn, homeController.notifications);
 	app.get('/updatefriendrequest', homeController.updatefriendrequest);
 	app.get('/like/:postId', homeController.like);
 	app.get('/share/:postId', homeController.share);
@@ -44,5 +44,7 @@ module.exports = function() {
 
 	app.get('/user/:username/sendfriendrequest', userController.sendfriendrequest);
 	app.get('/user/:username/deletefriendrequest', userController.deletefriendrequest)
-	app.get('/user/:username', userController.renderUser)
+	app.get('/user/:username/friends', userController.friends)
+	app.get('/user/:username/unfriend', userController.unfriend)
+	app.get('/user/:username', userController.renderUser);
 };

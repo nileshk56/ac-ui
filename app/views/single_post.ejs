@@ -1,9 +1,27 @@
 <div class="media p-2 pb-4 mb-2">
     <div class="media-body">
       <div>
+        <% if(user_activity_type) { 
+          var type;
+          switch(user_activity_type) {
+            case "LIKE" :
+              type = "liked";
+              break;
+            case "COMMENT" : 
+              type = "commented";
+              break;
+            case "SHARE" :
+              type = "shared";
+              break;
+          }
+        %>
+        <h5><%= ua_username %> <small><%= type %></small> <%= username %>'s <small>post</small></h5>   
+        <hr/>
+        <% } else  {%>
         <img src="https://www.w3schools.com/bootstrap4/img_avatar3.png" alt="John Doe" class="mr-3 rounded-circle float-left" style="width:45px;" />
         <a href="<%= app.config.host + '/user/' + username %>" class="text-dark" ><h4 class="mb-0"><%= username %>nilsomeone</h4></a>
         <span class="text-muted small">Posted just now</span>
+        <% } %>
       </div>
       <% if(post_desc) { %>
         <p class="mt-2"><%= post_desc %></p>

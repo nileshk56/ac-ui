@@ -1,0 +1,31 @@
+<%- include('head') %>
+<%- include('header', user) %>
+<div class="container" >
+    
+    
+    
+    <div class="row">
+        <div class="col-md-6" id="divPosts">
+            <h3>Friends</h3>
+            <hr />  
+            <% if(users) {
+                users.forEach(function(user){ %>
+                    
+                    <div class="d-flex justify-content-between mb-3">
+                        <div class="col-md-5 p-0">
+                            <a href="<%= app.config.host + '/user/' + user.username %>"><img src="https://www.w3schools.com/bootstrap4/img_avatar3.png" alt="<%= user.username %>" class="mr-2 rounded-circle float-left" style="width:40px;">
+                            <h5 class="mt-2 text-dark"><%= user.username %></h5></a>
+                        </div>
+                      </div>
+                    <hr>
+            <% }) } else {%>
+                <h4>No Friends</h4>
+            <% } %>  
+            
+        </div>
+    </div>
+    
+</div>
+<br>    
+
+<%- include('footer') %>
