@@ -41,7 +41,13 @@ class Home extends Base {
 
             var posts = results[0] && results[0][0] || [];
             var activities = results[1] && results[1][0] || [];
-            
+
+            if(posts.length == 0 && activities.length == 0) {
+                return res.json({
+                    status : "FAIL"
+                });
+            }
+
             var viewData = {
                 user : req.session.user,
                 msg : (req.session.msg && req.session.msg.body) || '',
@@ -196,6 +202,7 @@ class Home extends Base {
                 postData.like_count = 0;
                 postData.comment_count = 0;
                 postData.share_count = 0;
+                postData.user_activity_type = false;
                 res.render('single_post', postData)
             });
         });
@@ -440,6 +447,63 @@ class Home extends Base {
             app.db.mysql.query(qr);
             res.json({"status" : "Rejected"});
         }
+    }
+
+    renderUpp(req, res) {
+        
+        var viewData = {
+            user : req.session.user,
+            msg : (req.session.msg && req.session.msg.body) || '',
+        };
+
+        res.render('upp', viewData);
+    }
+
+    upp(req, res) {
+        console.log("erreq", req.body, req.files);
+        let uploadPath = __dirname + "/../../public/" + app.config.uploads.uploadpath + "/";
+        let mediaFile = req.files && req.files.filePP;
+        let mediaFilePath = mediaFile && uploadPath + new Date().getTime() + mediaFile.name;
+        let mediaFileName = mediaFile && new Date().getTime() + mediaFile.name;
+        var awsMediaPath = "";
+        
+        console.log("evdfa", uploadPath, mediaFileName, mediaFilePath, mediaFile);
+        app.lib.async.auto([
+            //move file
+            function(cb) {
+                mediaFile.mv(mediaFilePath, cb); 
+            },
+            //write to s3
+            function (cb, results) {
+                
+                var s3 = new app.lib.AWS.S3({apiVersion: '2006-03-01'});
+                var uploadParams = {
+                    Bucket: "nk-s3", 
+                    Key: app.config.uploads.s3UploadPath + "/" + mediaFileName, 
+                    Body: fs.createReadStream(mediaFilePath),
+                    ContentType: mediaFile.mimetype,
+                    ACL: 'public-read'
+                };
+
+                s3.upload (uploadParams, function (err, data) {
+                    console.log("asdfadfsa",uploadParams, err, data);
+                    if(err)
+                        return cb(err);
+                    
+                        awsMediaPath = data.Location;   
+                    fs.unlink(mediaFilePath, function(err){
+                        cb(data);
+                    });    
+                });
+            }
+        ], function(err, results) {
+            
+            modelUsers.update('users', {image:awsMediaPath}, {user_id : req.session.user.user_id}, function(err, data){
+                req.session.user.image = awsMediaPath;
+                //res.json({status:"SUCCESS"});
+                res.redirect("/upp")
+            });
+        });
     }
 
 }

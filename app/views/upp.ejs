@@ -1,0 +1,32 @@
+
+<%- include('head') %>
+<%- include('header', user) %>
+<div class="container" >
+    
+    <div class="row">
+        <div class="col-md-6 text-center">
+            <p class="mb-5"><h3>Upload profile photo</h3></p>
+            <hr />
+            <br>
+            <form action="<%= app.config.host%>/upp" method="post" class="mb-4" enctype="multipart/form-data">
+                <% if(user.image) { %> 
+                <img src="<%= user.image%>" class=" rounded-circle " style="width:300px;" />
+                <%} else {%>
+                <i class="fas fa-user-circle fa-10x text-secondary"></i>
+                <%}%>
+                    <br> <br>  
+                
+                
+                <input type="file" name="filePP" id="filePP" /> 
+                <br> 
+                <br>
+                <input type="submit" class="btn btn-danger" value="Submit" />
+            </form>
+            <br>
+            <hr />
+        </div>
+    </div>
+
+</div>
+<p class="mb-5"><h1><br></h1></p>
+<%- include('footer') %>

@@ -157,11 +157,16 @@ $( document ).ready(function() {
         var offset = parseInt($(this).data("offset"));
         var limit = 1;
         $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
-        $.get('/?offset='+offset, function(data){
-            $("#divPosts").append(data);
-            offset += limit;
-            $("#btnLoadMorePosts").html("Load More");
-            $("#btnLoadMorePosts").data("offset", offset)
+        $.get('/?offset='+offset, function(data, status){
+            console.log("asdfad", data, status);
+            if(data.status != 'FAIL') {
+                $("#divPosts").append(data);
+                offset += limit;
+                $("#btnLoadMorePosts").html("Load more posts");
+                $("#btnLoadMorePosts").data("offset", offset);
+            } else {
+                $("#btnLoadMorePosts").hide();
+            }
         });
     });
 
@@ -233,6 +238,45 @@ $( document ).ready(function() {
         })
         return false;
     });
+
+    $("#frmUpp").submit(function(e){
+        
+        e.preventDefault();
+        $( this ).fadeTo( "slow", 0.33 );
+
+        //get the action-url of the form
+        var actionurl = e.currentTarget.action;
+
+        // Get form
+        var form = $('#frmUpp')[0];
+
+		// Create an FormData object 
+        var data = new FormData(form);
+        data.append("filePP", $(form.filePP).val());
+        data.append("a","b");
+        console.log("data", actionurl, data)
+        $.ajax({
+            type: "POST",
+            enctype: 'multipart/form-data',
+            url: actionurl,
+            data: data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (data) {
+                $( "#frmUpp" ).fadeTo( "slow", 1 );
+                $("#frmUpp")[0].reset();
+                window.location = actionurl
+            },
+            error: function (e) {
+                console.log("ERROR : ", e);
+                $("#frmUpp")[0].reset();
+            }
+        });
+    });
+
+
 
     /*$( "#dob" ).datepicker({
         changeMonth: true,

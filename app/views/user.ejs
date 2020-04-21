@@ -24,7 +24,9 @@
         <div class="col-md-6" id="divPosts">
             <br>
             <% if(posts.length) {
-            posts.forEach(function(post){ %>
+            posts.forEach(function(post){ 
+                post.user_activity_type = false;
+            %>
               <%- include('single_post', post); %>
 
           <% }) } else { %>
@@ -48,7 +50,10 @@
 <%} else {%>
 
     <% if(posts.length) {
-        posts.forEach(function(post){ %>
+        posts.forEach(function(post){ 
+            post.user_activity_type = false;
+        %>
+
           <%- include('single_post', post); %>
       <% }) } %>  
 

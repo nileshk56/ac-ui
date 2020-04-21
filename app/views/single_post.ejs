@@ -15,12 +15,16 @@
               break;
           }
         %>
-        <h5><%= ua_username %> <small><%= type %></small> <%= username %>'s <small>post</small></h5>   
+        <h5><a href="<%= app.config.host + '/user/' + ua_username %>" class="text-dark"><%= ua_username %></a> <small><%= type %></small> <a href="<%= app.config.host + '/user/' + username %>" class="text-dark"><%= username %>'s</a> <small>post</small></h5>   
         <hr/>
         <% } else  {%>
-        <img src="https://www.w3schools.com/bootstrap4/img_avatar3.png" alt="John Doe" class="mr-3 rounded-circle float-left" style="width:45px;" />
-        <a href="<%= app.config.host + '/user/' + username %>" class="text-dark" ><h4 class="mb-0"><%= username %>nilsomeone</h4></a>
-        <span class="text-muted small">Posted just now</span>
+        <% if(image) { %>  
+        <img src="<%= image %>" alt="John Doe" class="mr-3 rounded-circle float-left" style="width:45px;" />
+        <%} else {%>
+        <p><i class="fas fa-user-circle fa-3x float-left mr-3"></i>
+        <% } %>
+        <a href="<%= app.config.host + '/user/' + username %>" class="text-dark" ><h4 class="mb-0"><%= username %></h4></a>
+        <span class="text-muted small">Posted just now</span></p>
         <% } %>
       </div>
       <% if(post_desc) { %>

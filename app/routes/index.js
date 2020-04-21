@@ -36,6 +36,8 @@ module.exports = function() {
 	app.get('/share/:postId', homeController.share);
 	app.post("/comment", homeController.comment);
 	app.post("/post", homeController.createPost);
+	app.get("/upp", commonMiddleware.isLoggedIn, homeController.renderUpp);
+	app.post("/upp", commonMiddleware.isLoggedIn, homeController.upp);
 
 	app.get('/login', loginController.renderLogin);
 	app.post('/login', loginController.signIn);

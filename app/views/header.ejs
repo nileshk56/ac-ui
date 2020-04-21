@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-md bg-dark navbar-dark justify-content-between mb-2">
     <div class="container">
-    <a class=" text-danger font-weight-bolder h3 m-0 p-0" href="#">Navbar</a>
+    <a class="text-warning font-weight-bolder h3 m-0 p-0" href="#">DecentMate</a>
     <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -12,19 +12,20 @@
         <ul class="navbar-nav ml-auto">
           <% if(user) {%>
           <li class="nav-item">
-            <a class="nav-link" href="<%= app.config.host %>">Home</a>
+            <a class="nav-link text-warning" href="<%= app.config.host %>">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="<%= app.config.host + '/notifications' %>">Notifications 
+            <a class="nav-link text-warning" href="<%= app.config.host + '/notifications' %>">Notifications 
               <% if(user.notificationCount) {%>
               <span class="badge badge-light"><%= user.notificationCount %></span>
               <%}%>
             </a>
           </li>  
           <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle font-weight-bold" data-toggle="dropdown" href="#"><%= user.username %></a>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="<%= app.config.host + '/user/' + username %>">My Profile</a>
+              <a class="nav-link dropdown-toggle font-weight-bold text-warning" data-toggle="dropdown" href="#"><%= user.username %></a>
+              <div class="dropdown-menu ">
+                <a class="dropdown-item" href="<%= app.config.host + '/user/' + username %>">My profile</a>
+                <a class="dropdown-item" href="<%= app.config.host + '/upp' %>">Upload profile photo</a>
                 <a class="dropdown-item" href="<%= app.config.host + '/user/' + username + '/friends'%>">Friends</a>
                 <a class="dropdown-item" href="<%= app.config.host + '/logout'  %>">Sign out</a>
               </div>
