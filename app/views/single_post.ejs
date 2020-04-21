@@ -33,6 +33,7 @@
       
       <% if(post_type=="I") { %>
         <p class="<%= post_desc ? 'mt-2' : '' %>"><img class="img-fluid" src="<%= media_path %>"></p>
+        <p class="text-right"><a href="<%= app.config.host + '/download?url='+media_path %>">Download</a></p>
       <% } %>
 
       <% if(post_type=="V") { %>
@@ -42,6 +43,7 @@
                 <p>Your browser doesn't support HTML5 video</p>
             </video>
         </p>
+        <p class="text-right"><a href="<%= app.config.host + '/download?url='+media_path %>">Download</a></p>
       <% } %>
       
       <div class="d-flex border-top border-bottom mb-3">

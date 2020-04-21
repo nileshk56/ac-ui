@@ -38,6 +38,7 @@ module.exports = function() {
 	app.post("/post", homeController.createPost);
 	app.get("/upp", commonMiddleware.isLoggedIn, homeController.renderUpp);
 	app.post("/upp", commonMiddleware.isLoggedIn, homeController.upp);
+	app.get("/download", homeController.download);
 
 	app.get('/login', loginController.renderLogin);
 	app.post('/login', loginController.signIn);

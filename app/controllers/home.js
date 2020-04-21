@@ -193,7 +193,8 @@ class Home extends Base {
                 post_desc : req.body.txtPost,
                 media_path : awsMediaPath,
                 user_id : (req.session.user && req.session.user.user_id) || 0,
-                username : (req.session.user && req.session.user.username) || ""
+                username : (req.session.user && req.session.user.username) || "",
+                image : (req.session.user && req.session.user.image) || "",
             };
             console.log("FINALLL", err, results, postData);
             modelUsers.insert('posts', postData, (err, results)=>{
@@ -504,6 +505,13 @@ class Home extends Base {
                 res.redirect("/upp")
             });
         });
+    }
+
+    download(req, res) {
+        var url = req.query.url;
+        var filename = url.substring(url.lastIndexOf('/')+1);
+        res.attachment(filename);
+        app.lib.request.get(url).pipe(res)
     }
 
 }
