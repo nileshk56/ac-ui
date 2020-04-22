@@ -221,10 +221,14 @@ $( document ).ready(function() {
         var url = $(this).attr('href');
         $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
         $.get(url+'?offset='+offset, function(data){
-            $("#divPosts").append(data);
-            offset += limit;
-            $("#btnLoadMoreUserPosts").html("Load more posts");
-            $("#btnLoadMoreUserPosts").data("offset", offset)
+            if(data.status != 'FAIL') {
+                $("#divPosts").append(data);
+                offset += limit;
+                $("#btnLoadMoreUserPosts").html("Load more posts");
+                $("#btnLoadMoreUserPosts").data("offset", offset)
+            } else {
+                $("#btnLoadMoreUserPosts").hide();
+            }
         });
         return false;
     });

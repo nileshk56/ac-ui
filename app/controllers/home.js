@@ -67,6 +67,15 @@ class Home extends Base {
                 });
             }
 
+            posts.map(function(post){
+                post.isLoggedIn = req.session.user ? true : false;
+                return post;
+            });
+            activities.map(function(post){
+                post.isLoggedIn = req.session.user ? true : false;
+                return post;
+            }); 
+
             var viewData = {
                 user : req.session.user,
                 msg : (req.session.msg && req.session.msg.body) || '',
@@ -226,6 +235,7 @@ class Home extends Base {
                 postData.user_activity_type = false;
                 postData.created = new Date();
                 postData.image = (req.session.user && req.session.user.image) || "",
+                postData.isLoggedIn = true;
                 res.render('single_post', postData)
             });
         });
