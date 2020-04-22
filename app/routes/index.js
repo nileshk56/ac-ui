@@ -29,6 +29,7 @@ module.exports = function() {
 	app.get('/logout', loginController.logout);*/
 
 	app.get('/', homeController.renderHome);
+	app.get('/type/:type', homeController.renderHome);
 	app.get('/search', homeController.search);
 	app.get('/notifications', commonMiddleware.isLoggedIn, homeController.notifications);
 	app.get('/updatefriendrequest', homeController.updatefriendrequest);

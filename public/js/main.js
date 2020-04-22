@@ -4,10 +4,14 @@ $( document ).ready(function() {
         $("#modalCreatePost").modal()
     });
     
-    $('#txtPost').focus();
+    //$('#txtPost').focus();
 
     $('#txtPost')
-    .click(function(){ this.rows=3 });
+    .click(function(){ 
+        this.rows=3;
+        $('#txtPost').addClass("p-2");
+        $('#txtPost').css("font-size", "14px") 
+    });
 
     $("#btnAddMedia").click(function(){
         $("#filePostsMedia").click();
@@ -156,8 +160,9 @@ $( document ).ready(function() {
     $("#btnLoadMorePosts").click(function(){
         var offset = parseInt($(this).data("offset"));
         var limit = 1;
+        var url = $(this).attr('href');
         $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
-        $.get('/?offset='+offset, function(data, status){
+        $.get(url+'?offset='+offset, function(data, status){
             console.log("asdfad", data, status);
             if(data.status != 'FAIL') {
                 $("#divPosts").append(data);
@@ -168,6 +173,7 @@ $( document ).ready(function() {
                 $("#btnLoadMorePosts").hide();
             }
         });
+        return false;
     });
 
     //$("#btnFriendRequest").click(function(){

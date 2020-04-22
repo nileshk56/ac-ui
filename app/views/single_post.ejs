@@ -1,4 +1,4 @@
-<div class="media p-2 pb-4 mb-2">
+<div class="media p-2 pb-4 mb-1">
     <div class="media-body">
       <div>
         <% if(user_activity_type) { 
@@ -24,7 +24,7 @@
         <p><i class="fas fa-user-circle fa-3x float-left mr-3"></i>
         <% } %>
         <a href="<%= app.config.host + '/user/' + username %>" class="text-dark" ><h4 class="mb-0"><%= username %></h4></a>
-        <span class="text-muted small">Posted just now</span></p>
+        <span class="text-muted small">Posted <%= new Date(created).toDateString() %></span></p>
         <% } %>
       </div>
       <% if(post_desc) { %>
@@ -40,7 +40,6 @@
         <p class="embed-responsive embed-responsive-4by3">
             <video controls class="embed-responsive-item">
                 <source src="<%= media_path %>" type="video/mp4">
-                <p>Your browser doesn't support HTML5 video</p>
             </video>
         </p>
         <p class="text-right"><a href="<%= app.config.host + '/download?url='+media_path %>">Download</a></p>
@@ -88,3 +87,4 @@
       
     </div>
 </div>
+<hr size="5px" />

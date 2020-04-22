@@ -6,34 +6,34 @@
   </div>
 <% } %>
 
+<% if (user) { %>
 <form action="<%= app.config.host%>/post" method="post" id="frmAddCreatePost" class="mb-4" enctype="multipart/form-data">
   <div class="form-group">
-  <label for="comment" class="h3 font-weight-bold">Create Post</label>
-  <textarea class="form-control border-0  p-2" rows="1" id="txtPost" name="txtPost" placeholder="Write Your Post here"></textarea>
+  <textarea class="form-control border-0 p-0" rows="1" id="txtPost" name="txtPost" placeholder="Write your post here..." style="font-size:24px"></textarea>
   </div>
   <div class="d-flex justify-content-between mb-3">
     <div>
-      <button type="button" class="btn btn-light" id="btnAddMedia">Add Video/Image</button>
+      <button type="button" class="btn btn-danger" id="btnAddMedia">Add Video/Image</button>
       <input type="file" name="filePostsMedia" id="filePostsMedia" hidden />
     </div>
-    <div><button type="submit" class="btn btn-primary ">Create Post</button></div>
+    <div><button type="submit" class="btn btn-danger ">Create Post</button></div>
   </div>
 </form>
-
-<hr>
+<hr style="border-top: solid 3px #CCC;" >
+<% } %>
 
 <ul class="nav nav-tabs nav-justified lead font-weight-bolder mt-4">
   <li class="nav-item">
-    <a class="nav-link active" href="#">Text</a>
+    <a class="nav-link <%= !type ? 'active' : '' %>" href="/">All</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="#">All</a>
+    <a class="nav-link <%= type == 'videos' ? 'active' : '' %>" href="/type/videos">Videos</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="#">Videos</a>
+    <a class="nav-link <%= type == 'images' ? 'active' : '' %>" href="/type/images">Images</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="#">Images</a>
+    <a class="nav-link <%= type == 'text' ? 'active' : '' %>" href="/type/text">Text</a>
   </li>
 </ul>
 <br>

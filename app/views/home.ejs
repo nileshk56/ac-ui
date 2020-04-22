@@ -1,13 +1,13 @@
 <%- include('head') %>
 <%- include('header', user) %>
 <div class="container" >
-    <% if(user) {%>
+    
     <div class="row">
         <div class="col-md-6">
-            <%- include('tabs') %>
+            <%- include('tabs', {user:user}) %>
         </div>
     </div>
-    <% } %>
+    
     <div class="row">
         <div class="col-md-6" id="divPosts">
 
@@ -27,7 +27,7 @@
     </div>
     <div class="row">
         <div class="col-md-6 text-center">
-          <a class="btn btn-danger pl-5 pr-5 text-light" id="btnLoadMorePosts" data-offset="2">Load more posts</a>
+          <a href="<%= type ? '/type/'+type : '/'%>" class="btn btn-danger pl-5 pr-5 text-light" id="btnLoadMorePosts" data-offset="2">Load more posts</a>
         </div>
     </div>
 </div>

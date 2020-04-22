@@ -7,6 +7,19 @@ class Home extends Base {
     renderHome(req, res) {
         
         var offset = (req.query.offset && req.query.offset - 1) || 0; 
+        var paramType = req.params.type;
+        var type="";
+        switch(paramType) {
+            case "videos" :
+                type = "and p.post_type = 'V'";
+                break;
+            case "images" :
+                type = "and p.post_type = 'I'";
+                break;
+            case "text" :
+                type = "and p.post_type = 'T'";
+                break;
+        }
 
         //NEW
         app.lib.async.parallel([
@@ -19,13 +32,19 @@ class Home extends Base {
                     req.session.postsSortBy = (Math.floor(Math.random()*10) % 2 == 0) ? "like_count" : "created";
                 }
 
-                var qr = "select * from posts p, users u where p.user_id = u.user_id order by p."+ req.session.postsSortBy +" desc limit " + offset + ", 1";
+                //show logged in user only most liked content
+                if(!req.session.user) {
+                    req.session.postsSortBy = "like_count"
+                }
+
+                var qr = "select * from posts p, users u where p.user_id = u.user_id "+type+" order by p."+ req.session.postsSortBy +" desc limit " + offset + ", 1";
                 console.log("homeq", qr);
                 app.db.mysql.query(qr, cb);
             },
             function(cb) {
                 //page should be loaded for non logged in user as well and for non logged in user there are no activitis
-                if(!req.session.user) {
+                //for videos or images there will be no activities that is handled with `type` variable
+                if(!req.session.user || type) {
                     return cb(null)
                 }
 
@@ -52,7 +71,8 @@ class Home extends Base {
                 user : req.session.user,
                 msg : (req.session.msg && req.session.msg.body) || '',
                 posts : posts,
-                activities : activities    
+                activities : activities,
+                type : req.params.type    
             };
             
             console.log("HOME viewData", viewData,results)
@@ -194,16 +214,18 @@ class Home extends Base {
                 media_path : awsMediaPath,
                 user_id : (req.session.user && req.session.user.user_id) || 0,
                 username : (req.session.user && req.session.user.username) || "",
-                image : (req.session.user && req.session.user.image) || "",
+                
             };
-            console.log("FINALLL", err, results, postData);
             modelUsers.insert('posts', postData, (err, results)=>{
+                console.log("FINALLL", err, results, postData);
                 postData.username = req.session.user.username;
                 postData.post_id = results.insertId;
                 postData.like_count = 0;
                 postData.comment_count = 0;
                 postData.share_count = 0;
                 postData.user_activity_type = false;
+                postData.created = new Date();
+                postData.image = (req.session.user && req.session.user.image) || "",
                 res.render('single_post', postData)
             });
         });
@@ -512,6 +534,63 @@ class Home extends Base {
         var filename = url.substring(url.lastIndexOf('/')+1);
         res.attachment(filename);
         app.lib.request.get(url).pipe(res)
+    }
+
+    renderFocues(req, res) {
+        
+        var offset = (req.query.offset && req.query.offset - 1) || 0; 
+        var type = req.query.type || '';
+
+        //NEW
+        app.lib.async.parallel([
+            function(cb) {
+                //we want to show user lots of new posts if we keep only sort by like_count then user will see same posts
+                //save above sortby in session so for further more/pagination request we will show him the sorted posts
+                //this sortby stored in session is used in renderPosts()
+                //if !offset means its first page and set the session for sort order
+                if(!offset) {
+                    req.session.postsSortBy = (Math.floor(Math.random()*10) % 2 == 0) ? "like_count" : "created";
+                }
+
+                //show logged in user only most liked content
+                if(!req.session.user) {
+                    req.session.postsSortBy = "like_count"
+                }
+
+                var qr = "select * from posts p, users u where p.user_id = u.user_id and p.post_type = '"+type+"' order by p."+ req.session.postsSortBy +" desc limit " + offset + ", 1";
+                console.log("homeq", qr);
+                app.db.mysql.query(qr, cb);
+            }
+        ],
+        function(err, results) {
+            
+            console.log("FINAL", results);
+
+            var posts = results[0] && results[0][0] || [];
+            var activities = results[1] && results[1][0] || [];
+
+            if(posts.length == 0 && activities.length == 0) {
+                return res.json({
+                    status : "FAIL"
+                });
+            }
+
+            var viewData = {
+                user : req.session.user,
+                msg : (req.session.msg && req.session.msg.body) || '',
+                posts : posts,
+                activities : activities    
+            };
+            
+            console.log("HOME viewData", viewData,results)
+
+            if(offset) {
+                res.render('posts_pagination', viewData);
+            } else {
+                res.render('home', viewData);
+            }
+        });
+
     }
 
 }
