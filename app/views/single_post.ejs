@@ -1,4 +1,4 @@
-<div class="media pl-3 pr-3">
+<div class="media pl-3 pr-3 mt-4 mb-4">
     <div class="media-body">
       <div>
         <% if(user_activity_type) { 
@@ -45,7 +45,7 @@
         <!--<p class="text-right"><a href="<%= app.config.host + '/download?url='+media_path %>">Download</a></p>-->
       <% } %>
       
-      <div class="d-flex border-top border-bottom mb-3">
+      <div class="d-flex border-top border-bottom">
         <div class="p-2 text-center flex-fill">
           <a style="display: block;" href="<%= app.config.host + '/like/' + post_id %>" class="btnPostLike text-secondary" data-postid="<%= post_id %>" data-likecount="<%= like_count %>"><!--<i class="far fa-thumbs-up text-secondary"></i> -->Like <span class="font-weight-bold text-secondary"><%= like_count %></span></a> 
         </div>
