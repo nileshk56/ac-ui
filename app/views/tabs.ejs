@@ -7,13 +7,13 @@
 <% } %>
 
 <% if (user) { %>
-<form action="<%= app.config.host%>/post" method="post" id="frmAddCreatePost" class="mb-4" enctype="multipart/form-data">
+<form action="<%= app.config.host%>/post" method="post" id="frmAddCreatePost" class="pl-3 pr-3 mb-4" enctype="multipart/form-data">
   <div class="form-group">
-  <textarea class="form-control border-0 p-0" rows="1" id="txtPost" name="txtPost" placeholder="Write your post here..." style="font-size:24px"></textarea>
+  <textarea class="form-control border-0 p-0" rows="1" id="txtPost" name="txtPost" placeholder="Write your post here..." style="font-size:20px"></textarea>
   </div>
   <div class="d-flex justify-content-between mb-3">
     <div>
-      <button type="button" class="btn btn-danger" id="btnAddMedia">Add Video/Image</button>
+      <button type="button" class="btn btn-danger" id="btnAddMedia">Add Video / Image</button>
       <input type="file" name="filePostsMedia" id="filePostsMedia" hidden />
     </div>
     <div><button type="submit" class="btn btn-danger ">Create Post</button></div>
@@ -27,13 +27,13 @@
     <a class="nav-link <%= !type ? 'active' : '' %>" href="/">All</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link <%= type == 'videos' ? 'active' : '' %>" href="/type/videos">Videos</a>
+    <a class="nav-link <%= type == 'videos' ? 'active' : '' %> text-secondary" href="/type/videos">Videos</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link <%= type == 'images' ? 'active' : '' %>" href="/type/images">Images</a>
+    <a class="nav-link <%= type == 'images' ? 'active' : '' %> text-secondary" href="/type/images">Images</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link <%= type == 'text' ? 'active' : '' %>" href="/type/text">Text</a>
+    <a class="nav-link <%= type == 'text' ? 'active' : '' %> text-secondary" href="/type/text">Text</a>
   </li>
 </ul>
 <br>

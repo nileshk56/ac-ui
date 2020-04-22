@@ -1,4 +1,4 @@
-<div class="media p-2 pb-4 mb-1">
+<div class="media pl-3 pr-3">
     <div class="media-body">
       <div>
         <% if(user_activity_type) { 
@@ -33,7 +33,7 @@
       
       <% if(post_type=="I") { %>
         <p class="<%= post_desc ? 'mt-2' : '' %>"><img class="img-fluid" src="<%= media_path %>"></p>
-        <p class="text-right"><a href="<%= app.config.host + '/download?url='+media_path %>">Download</a></p>
+        <!--<p class="text-right"><a href="<%= app.config.host + '/download?url='+media_path %>">Download</a></p>-->
       <% } %>
 
       <% if(post_type=="V") { %>
@@ -42,49 +42,33 @@
                 <source src="<%= media_path %>" type="video/mp4">
             </video>
         </p>
-        <p class="text-right"><a href="<%= app.config.host + '/download?url='+media_path %>">Download</a></p>
+        <!--<p class="text-right"><a href="<%= app.config.host + '/download?url='+media_path %>">Download</a></p>-->
       <% } %>
       
       <div class="d-flex border-top border-bottom mb-3">
         <div class="p-2 text-center flex-fill">
-          <a href="<%= app.config.host + '/like/' + post_id %>" class="btnPostLike" data-postid="<%= post_id %>" data-likecount="<%= like_count %>">Like <span class="font-weight-bold text-secondary"><%= like_count %></span></a> 
+          <a style="display: block;" href="<%= app.config.host + '/like/' + post_id %>" class="btnPostLike text-secondary" data-postid="<%= post_id %>" data-likecount="<%= like_count %>"><!--<i class="far fa-thumbs-up text-secondary"></i> -->Like <span class="font-weight-bold text-secondary"><%= like_count %></span></a> 
         </div>
         <div class="p-2 text-center flex-fill">
-          <a href="#" class="btnPostComment" data-postid="<%= post_id %>" data-commentcount="<%= comment_count %>">Comment <span class="font-weight-bold text-secondary"><%= comment_count %></span></a>
+          <a style="display: block;" href="#" class="btnPostComment text-secondary" data-postid="<%= post_id %>" data-commentcount="<%= comment_count %>"><!--<i class="far fa-comment-dots text-secondary"></i> -->Comment <span class="font-weight-bold text-secondary"><%= comment_count %></span></a>
         </div>
         <div class="p-2 text-center flex-fill">
-          <a href="<%= app.config.host + '/share/' + post_id %>" class="btnPostShare" data-postid="<%= post_id %>" data-sharecount="<%= share_count %>">Share <span class="font-weight-bold text-secondary"><%= share_count %></span></a>
+          <a style="display: block;" href="<%= app.config.host + '/share/' + post_id %>" class="btnPostShare text-secondary" data-postid="<%= post_id %>" data-sharecount="<%= share_count %>"><!--<i class="far fa-share-square text-secondary"></i> -->Share <span class="font-weight-bold text-secondary"><%= share_count %></span></a>
         </div>
+        <% if(post_type=="V" || post_type=="I") { %>
+        <div class="p-2 text-center flex-fill">
+          <a style="display: block;" href="<%= app.config.host + '/download?url='+media_path %>" class="text-secondary"><!--<i class="fas fa-download"></i> -->Download<span class="font-weight-bold text-secondary">&nbsp;</span></a>
+        </div>
+        <% } %>
       </div>
       <div id="divPostComments_<%= post_id %>" style="display: none;">
           <form action="<%= app.config.host + '/comment' %>" method="post" class="formPostComment">
               <textarea placeholder="Write a comment..." rows="2" class="form-control border-0 formTxtComment" name="comment"></textarea>
               <input type="hidden" value="<%= post_id %>" name="post_id" >
           </form>  
-        
-          <div class="media p-1">
-            <div class="media-body">
-              <img src="https://www.w3schools.com/bootstrap4/img_avatar3.png" alt="John Doe" class="mr-3 rounded-circle float-left" style="width:40px;">
-              <h5>akshaykumar67 <br><small><i class="small">Posted just now</i></small></h5>
-              <p>Some random awesome comment and text</p>
-            </div>
-          </div>
-          <div class="media p-1">
-            <div class="media-body">
-              <img src="https://www.w3schools.com/bootstrap4/img_avatar3.png" alt="John Doe" class="mr-3 rounded-circle float-left" style="width:40px;">
-              <h5>akshaykumar67 <br><small><i class="small">Posted just now</i></small></h5>
-              <p>Some random awesome comment and text</p>
-            </div>
-          </div>
-          <div class="media p-1">
-            <div class="media-body">
-              <img src="https://www.w3schools.com/bootstrap4/img_avatar3.png" alt="John Doe" class="mr-3 rounded-circle float-left" style="width:40px;">
-              <h5>akshaykumar67 <br><small><i class="small">Posted just now</i></small></h5>
-              <p>Some random awesome comment and text</p>
-            </div>
-          </div>
+      
       </div>
       
     </div>
 </div>
-<hr size="5px" />
+<hr style="border-top: solid 5px #CCC;" >

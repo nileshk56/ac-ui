@@ -13,6 +13,9 @@ class User extends Base {
             },
             function(cb) {
                 modelUsers.fetch('user_activities', '*', {username : username}, {created:"desc"}, 1, offset, cb);
+            },
+            function(cb) {
+                modelUsers.fetch('users', '*', {username : username}, null, 1, 0, cb);
             }
         ],
         function(err, results) {
@@ -21,12 +24,14 @@ class User extends Base {
             if(results[1] && results[1].length) {
                 posts.concat(results[1][0]);
             }
+            var user = results[2][0]
             var viewData = {
                 user : req.session.user,
                 msg : req.session.msg,
                 posts : posts,
                 username : username,
-                offset : offset    
+                offset : offset,
+                image : user[0]["image"]    
             };
             console.log("asdfad", viewData, results);   
             res.render('user', viewData);
