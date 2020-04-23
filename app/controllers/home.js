@@ -9,6 +9,8 @@ class Home extends Base {
         var offset = (req.query.offset && req.query.offset - 1) || 0; 
         var paramType = req.params.type;
         var type="";
+        var msg  = req.session.msg || {};
+        delete req.session.msg;
         switch(paramType) {
             case "videos" :
                 type = "and p.post_type = 'V'";
@@ -61,7 +63,7 @@ class Home extends Base {
             var posts = results[0] && results[0][0] || [];
             var activities = results[1] && results[1][0] || [];
 
-            if(posts.length == 0 && activities.length == 0) {
+            if(offset && posts.length == 0 && activities.length == 0) {
                 return res.json({
                     status : "FAIL"
                 });
@@ -78,13 +80,15 @@ class Home extends Base {
 
             var viewData = {
                 user : req.session.user,
-                msg : (req.session.msg && req.session.msg.body) || '',
+                msg : msg.body,
                 posts : posts,
                 activities : activities,
                 type : req.params.type    
             };
             
             console.log("HOME viewData", viewData,results)
+
+            delete req.session.msg;
 
             if(offset) {
                 res.render('posts_pagination', viewData);

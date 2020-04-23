@@ -16,6 +16,11 @@ $( document ).ready(function() {
     $("#btnAddMedia").click(function(){
         $("#filePostsMedia").click();
     });
+    $("#filePostsMedia").change(function(e){
+        var arrPath = $("#filePostsMedia").val().split('\\');
+
+        $("#frmAddCreatePost").append("<p>"+arrPath[arrPath.length-1]+"</p>");
+    });
 
     $("#frmAddCreatePost").submit(function(e){
         

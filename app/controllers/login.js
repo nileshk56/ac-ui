@@ -5,9 +5,10 @@ var randomstring = require("randomstring");
 class Login extends Base {
 
     renderLogin(req, res) {
-        
+        var msg = req.session.msg || {};
+        delete req.session.msg;
         var viewData = {
-            msg : req.session.msg && req.session.msg.body
+            msg : msg.body
         };
         
         res.render('login', viewData);
