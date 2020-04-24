@@ -28,7 +28,7 @@ class User extends Base {
                 posts = posts.concat(results[1][0]);
             }
             
-            if(posts.length == 0) {
+            if(offset && posts.length == 0) {
                 return res.json({
                     status : "FAIL"
                 });

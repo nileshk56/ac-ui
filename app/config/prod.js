@@ -3,10 +3,10 @@ module.exports = {
     serverPort : 5600,
     db : {
         mysql : {
-            host            : "sto.cwbsabhe4ogh.ap-south-1.rds.amazonaws.com",
+            host            : "nk-db.c1mxmujfpbmz.us-east-1.rds.amazonaws.com",
             user            : "nilesh56",
-            password        : "nileshw56",
-            database        : "sto"
+            password        : "nilesh56",
+            database        : "nkdb"
         },
         mongoDB : {
             url     : 'mongodb://localhost:27017',
