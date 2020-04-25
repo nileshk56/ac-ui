@@ -662,7 +662,8 @@ class Home extends Base {
                 user : req.session.user,
                 msg : msg.body,
                 posts : posts,
-                type : ""
+                type : "",
+                activities : false
             };
             
             delete req.session.msg;
