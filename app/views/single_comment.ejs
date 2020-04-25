@@ -1,11 +1,11 @@
 <div class="media p-1">
     <div class="media-body">
         <% if(image) {%>
-        <img src="<%= image %>" alt="<%= username %>" class="mr-3 rounded-circle float-left" style="width:40px;">
+        <img src="<%= image %>" alt="<%= username %>" class="mr-3 rounded-circle float-left" style="width:35px;">
         <% } else {%>
-            <i class="fas fa-user-circle fa-3x float-left mr-3"></i>
+            <i class="fas fa-user-circle fa-2x float-left mr-3"></i>
         <% } %>
-        <h5><a href="<%= app.config.host + '/user/' + username %>" class="text-dark"><%= username %></a> <br><small><i class="small">Posted <%= new Date(created).toDateString() %></i></small></h5>
+        <h6><a href="<%= app.config.host + '/user/' + username %>" class="text-dark"><%= username %></a> <br><small><i class="small">Posted <%= new Date(created).toDateString() %></i></small></h6>
         <p><%= comment %></p>
     </div>
 </div>

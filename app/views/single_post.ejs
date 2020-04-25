@@ -23,7 +23,7 @@
         <%} else {%>
         <p><i class="fas fa-user-circle fa-3x float-left mr-3"></i>
         <% } %>
-        <a href="<%= app.config.host + '/user/' + username %>" class="text-dark" ><h4 class="mb-0"><%= username %></h4></a>
+        <a href="<%= app.config.host + '/user/' + username %>" class="text-dark" ><h5 class="mb-0 pt-1"><%= username %></h5></a>
         <span class="text-muted small">Posted <%= new Date(created).toDateString() %></span></p>
         <% } %>
       </div>
