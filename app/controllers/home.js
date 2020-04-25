@@ -5,7 +5,7 @@ var fs = require("fs");
 class Home extends Base {
 
     renderHome(req, res) {
-        console.log("app.ismobile", app.config.isMobile);
+        
         var offset = (req.query.offset && req.query.offset - 1) || 0; 
         var paramType = req.params.type;
         var type="";
@@ -39,7 +39,7 @@ class Home extends Base {
                     req.session.postsSortBy = "like_count"
                 }
 
-                var qr = "select * from posts p, users u where p.user_id = u.user_id "+type+" order by p."+ req.session.postsSortBy +" desc limit " + offset + ", 1";
+                var qr = "select * from posts p, users u where p.user_id = u.user_id "+type+" order by p."+ req.session.postsSortBy +" desc limit " + offset + ", 10";
                 
                 app.db.mysql.query(qr, cb);
             },
@@ -51,7 +51,7 @@ class Home extends Base {
                 }
 
                 //fetch activities for logged in user
-                var qr  = "select ua.user_activity_type, ua.username as ua_username, ua.comment, ua.created, p.*, u.* from user_activities ua, posts p, users u where ua.post_id = p.post_id and p.user_id = u.user_id and ua.username in ('"+req.session.user.friends.join("','")+"') order by ua.created desc limit " +offset + ", 1";
+                var qr  = "select ua.user_activity_type, ua.username as ua_username, ua.comment, ua.created, p.*, u.* from user_activities ua, posts p, users u where ua.post_id = p.post_id and p.user_id = u.user_id and ua.username in ('"+req.session.user.friends.join("','")+"') order by ua.created desc limit " +offset + ", 10";
                 
                 app.db.mysql.query(qr, cb);
             }
@@ -416,7 +416,7 @@ class Home extends Base {
         var search = req.query.search;
         var offset = req.query.offset ? req.query.offset-1 : 0;
 
-        var qr = 'select * from users where username like "%'+search+'%" limit '+offset+', 1';
+        var qr = 'select * from users where username like "%'+search+'%" order by username asc limit '+offset+', 10';
         
         app.db.mysql.query(qr, function(err, results){
 
@@ -558,7 +558,7 @@ class Home extends Base {
                     req.session.postsSortBy = "like_count"
                 }
 
-                var qr = "select * from posts p, users u where p.user_id = u.user_id and p.post_type = '"+type+"' order by p."+ req.session.postsSortBy +" desc limit " + offset + ", 1";
+                var qr = "select * from posts p, users u where p.user_id = u.user_id and p.post_type = '"+type+"' order by p."+ req.session.postsSortBy +" desc limit " + offset + ", 10";
                 
                 app.db.mysql.query(qr, cb);
             }
@@ -633,7 +633,7 @@ class Home extends Base {
                     req.session.postsSortBy = "like_count"
                 }
 
-                var qr = "select * from posts p, users u where p.user_id = u.user_id order by p."+ req.session.postsSortBy +" desc limit " + offset + ", 1";
+                var qr = "select * from posts p, users u where p.user_id = u.user_id order by p."+ req.session.postsSortBy +" desc limit " + offset + ", 10";
                 
                 app.db.mysql.query(qr, cb);
             },

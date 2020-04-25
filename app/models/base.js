@@ -1,7 +1,7 @@
 class Base {
     fetch(table, columns = "*", where, sort, limit, offset, cb) {
         var qr = `SELECT ${columns} FROM ${table}` ;
-        console.log("asdf",where)
+        
         if(!app.lib._.isEmpty(where)) {
             qr += ` WHERE `;
 
@@ -31,23 +31,18 @@ class Base {
             qr += ` LIMIT ${offset}, ${limit}`;
         }
 
-        console.log("fqr",qr)
-
         app.db.mysql.query(qr, cb)
     }
 
     insert(table, objValues, cb) {
-        console.log("INSERT",table, objValues)
         app.db.mysql.query(`INSERT INTO ${table} SET ?`, objValues, cb);
     }
 
     update(table, objValues, ObjWhere, cb) {
-        console.log("UPDATE",table, objValues, ObjWhere)
         app.db.mysql.query(`UPDATE ${table} SET ? WHERE ?`, [objValues, ObjWhere], cb);
     }
 
     delete(table, ObjWhere, cb) {
-        console.log("DELETE",table, ObjWhere)
         app.db.mysql.query(`DELETE FROM ${table} WHERE ?`, [ObjWhere], cb);
     }
 
@@ -66,7 +61,6 @@ class Base {
             }
 
             qr = qr.slice(0,-3);
-            console.log("DELETEQR", QR)
             app.db.mysql.query(`D ${table} SET ? WHERE ?`, [objValues, ObjWhere], cb);
         }
         cb(null);

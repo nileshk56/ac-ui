@@ -173,7 +173,7 @@ $( document ).ready(function() {
     
     $("#btnLoadMorePosts").click(function(){
         var offset = parseInt($(this).data("offset"));
-        var limit = 1;
+        var limit = 10;
         var url = $(this).attr('href');
         $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
         $.get(url+'?offset='+offset, function(data, status){
@@ -219,7 +219,7 @@ $( document ).ready(function() {
     $("#btnLoadMoreUsers").click(function(){
         var offset = parseInt($(this).data("offset"));
         var search = $(this).data("search");
-        var limit = 1;
+        var limit = 10;
         $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
         $.get('/search?search='+search+'&offset='+offset, function(data){
             $("#divUsers").append(data);
@@ -231,7 +231,7 @@ $( document ).ready(function() {
 
     $("#btnLoadMoreUserPosts").click(function(){
         var offset = parseInt($(this).data("offset"));
-        var limit = 1;
+        var limit = 10;
         var url = $(this).attr('href');
         $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
         $.get(url+'?offset='+offset, function(data){

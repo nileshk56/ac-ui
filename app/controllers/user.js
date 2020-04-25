@@ -9,16 +9,16 @@ class User extends Base {
         
         app.lib.async.parallel([
             function(cb) {
-                modelUsers.fetch('posts', '*', {username : username}, {created:"desc"}, 1, offset, cb);
+                modelUsers.fetch('posts', '*', {username : username}, {created:"desc"}, 10, offset, cb);
             },
             function(cb) {
                 
-                var qr  = "select ua.user_activity_type, ua.username as ua_username, ua.comment, ua.created, p.*, u.* from user_activities ua, posts p, users u where ua.post_id = p.post_id and p.user_id = u.user_id and ua.username = ('"+username+"') order by ua.created desc limit " +offset + ", 1";
+                var qr  = "select ua.user_activity_type, ua.username as ua_username, ua.comment, ua.created, p.*, u.* from user_activities ua, posts p, users u where ua.post_id = p.post_id and p.user_id = u.user_id and ua.username = ('"+username+"') order by ua.created desc limit " +offset + ", 10";
                 
                 app.db.mysql.query(qr, cb);
             },
             function(cb) {
-                modelUsers.fetch('users', '*', {username : username}, null, 1, 0, cb);
+                modelUsers.fetch('users', '*', {username : username}, null, 10, 0, cb);
             }
         ],
         function(err, results) {
