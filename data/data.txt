@@ -1,7 +1,0 @@
-on login load all information of the user in session
-user can buy the token only when his status is active, someone from the backend will verify the KYC, once the KYC is verified  from backend we will set status of the user to active in user table
-once user submits his kyc we will update the user status to kyc_added in user table
-on user sign up his status will be KYC_PENDING
-
-Help desk : user will raise a ticket that will be assigned to someone and he can fulfill the request or can keep the request pending the flow is like below
-user raises a request, now that request is in open state, it gets assigned to someone X, now X can change request status to in_progress, after in_progress if that request is pending for some more details or approvals from client or someone else or that request id dependant on anything or anyone then user can put that request in pending state, if X completes it then that request will put in complete state by X, then user can close the request. that is the person who raises the request only he can close it. 
