@@ -40,7 +40,7 @@ class Home extends Base {
                 }
 
                 var qr = "select * from posts p, users u where p.user_id = u.user_id "+type+" order by p."+ req.session.postsSortBy +" desc limit " + offset + ", 1";
-                console.log("homeq", qr);
+                
                 app.db.mysql.query(qr, cb);
             },
             function(cb) {
@@ -52,14 +52,13 @@ class Home extends Base {
 
                 //fetch activities for logged in user
                 var qr  = "select ua.user_activity_type, ua.username as ua_username, ua.comment, ua.created, p.*, u.* from user_activities ua, posts p, users u where ua.post_id = p.post_id and p.user_id = u.user_id and ua.username in ('"+req.session.user.friends.join("','")+"') order by ua.created desc limit " +offset + ", 1";
-                console.log("QR2", qr)
+                
                 app.db.mysql.query(qr, cb);
             }
         ],
         function(err, results) {
             
-            console.log("FINAL", results);
-
+            
             var posts = results[0] && results[0][0] || [];
             var activities = results[1] && results[1][0] || [];
 
@@ -86,8 +85,6 @@ class Home extends Base {
                 type : req.params.type    
             };
             
-            console.log("HOME viewData", viewData,results)
-
             delete req.session.msg;
 
             if(offset) {
@@ -124,7 +121,7 @@ class Home extends Base {
                 idProof.mv(uploadPath + idProofFileName, cb)
             }
         ],function(err){
-            console.log("asdfafd",err);
+            
             if(err) {
                 return res.redirect('/error');
             }
@@ -143,7 +140,6 @@ class Home extends Base {
 
                     modelUsers.insert('kyc', data, function(err){
                         if(err) {
-                            console.log(err);
                             return res.redirect('/error')
                         }
                         modelUsers.update('users', {status:'KYC_ADDED'}, {user_id:req.session.user.user_id},()=>{}); 
@@ -154,7 +150,6 @@ class Home extends Base {
 
                     modelUsers.update('kyc', data, {user_id:req.session.user.user_id}, function(err){
                         if(err) {
-                            console.log(err);
                             return res.redirect('/error')
                         }
                         modelUsers.update('users', {status:'KYC_ADDED'}, {user_id:req.session.user.user_id},()=>{}); 
@@ -172,7 +167,7 @@ class Home extends Base {
     }
 
     createPost(req, res) {
-        console.log("erreq", req.body, req.files);
+        
         let uploadPath = __dirname + "/../../public/" + app.config.uploads.uploadpath + "/";
         let mediaFile = req.files && req.files.filePostsMedia;
         let mediaFilePath = mediaFile && uploadPath + new Date().getTime() + mediaFile.name;
@@ -186,7 +181,6 @@ class Home extends Base {
             postType = "V";
         } 
 
-        console.log("evdfa", uploadPath, mediaFileName, mediaFilePath, mediaFile);
         app.lib.async.auto([
             //move file
             function(cb) {
@@ -210,7 +204,7 @@ class Home extends Base {
                 };
 
                 s3.upload (uploadParams, function (err, data) {
-                    console.log("asdfadfsa",uploadParams, err, data);
+                    
                     if(err)
                         return cb(err);
                     
@@ -230,7 +224,7 @@ class Home extends Base {
                 
             };
             modelUsers.insert('posts', postData, (err, results)=>{
-                console.log("FINALLL", err, results, postData);
+                
                 postData.username = req.session.user.username;
                 postData.post_id = results.insertId;
                 postData.like_count = 0;
@@ -258,8 +252,6 @@ class Home extends Base {
                 msg : req.query.msg,
                 user : req.session.user
             };
-
-            console.log("asdfad",viewData, results, results[0]['first_name'])
 
             res.render('kyc', viewData);
         })    
@@ -297,7 +289,6 @@ class Home extends Base {
 
             var tokens = dollars / app.config.tokenPrice;
 
-            console.log(body.data[symbol]["quote"]["USD"]["price"], app.config.tokenPrice, dollars, tokens);
             res.json({tokens:tokens});
         });
     }
@@ -308,8 +299,7 @@ class Home extends Base {
         
         modelUsers.fetch('user_deposit_addresses', 'address', { user_id : req.session.user.user_id, symbol : req.body.buy_with}, null, null, null, function(err, results){
 
-            console.log('user_deposit_addresses', results);
-
+            
             if(results[0]) {
 
                 depositAddress = results[0].address;
@@ -327,8 +317,7 @@ class Home extends Base {
                     private_key : arrDepositAddress[1],
                 };
 
-                console.log('userAddressData', userAddressData);
-
+                
                 modelUsers.insert('user_deposit_addresses', userAddressData, ()=>{});
             }
 
@@ -342,11 +331,10 @@ class Home extends Base {
                 token_amount : req.body.token_amount
             };
 
-            console.log('dataasdf', data);
             
             modelUsers.insert('buy_orders', data, function(err, results){
                 if(err) {
-                    console.log(err);
+                    
                     if(err) {
                         return res.status(500).json(err);
                     }
@@ -391,7 +379,7 @@ class Home extends Base {
         };
 
         modelUsers.insert('user_activities', objUserActivities, function(err, results){
-            console.log("here34524", err, results);
+            
             if(err) 
                 return res.status(400).json({status : "FAIL"});
             
@@ -401,7 +389,7 @@ class Home extends Base {
             var commentData = {
                 comment : req.body.comment,
                 username : req.session.user.username,
-                commentTime : "just now"
+                created : new Date()
             };
 
             res.render('single_comment', commentData);
@@ -429,7 +417,7 @@ class Home extends Base {
         var offset = req.query.offset ? req.query.offset-1 : 0;
 
         var qr = 'select * from users where username like "%'+search+'%" limit '+offset+', 1';
-        console.log("QR", qr);
+        
         app.db.mysql.query(qr, function(err, results){
 
             var viewData = {
@@ -447,9 +435,9 @@ class Home extends Base {
     notifications(req, res){
         
         var qr = 'SELECT * FROM users u, friends f where u.username = f.from_username and f.friendship_status="SENT" and f.to_username="'+req.session.user.username+'" order by f.created desc limit 100';
-        console.log("asdfasdf",qr)
+        
         app.db.mysql.query(qr, function(err, results){
-            console.log("asdfasdf",qr, results, err)
+            
             var viewData = {
                 user : req.session.user,
                 msg : (req.session.msg && req.session.msg.body) || '',
@@ -474,7 +462,7 @@ class Home extends Base {
                     to_username : data['from_username'],
                     from_username : data['to_username']
                 };
-                console.log("dfadsFF", objInsert, results);
+                
                 modelUsers.insert('friends', objInsert)
             });
         }
@@ -497,14 +485,13 @@ class Home extends Base {
     }
 
     upp(req, res) {
-        console.log("erreq", req.body, req.files);
+        
         let uploadPath = __dirname + "/../../public/" + app.config.uploads.uploadpath + "/";
         let mediaFile = req.files && req.files.filePP;
         let mediaFilePath = mediaFile && uploadPath + new Date().getTime() + mediaFile.name;
         let mediaFileName = mediaFile && new Date().getTime() + mediaFile.name;
         var awsMediaPath = "";
         
-        console.log("evdfa", uploadPath, mediaFileName, mediaFilePath, mediaFile);
         app.lib.async.auto([
             //move file
             function(cb) {
@@ -523,7 +510,7 @@ class Home extends Base {
                 };
 
                 s3.upload (uploadParams, function (err, data) {
-                    console.log("asdfadfsa",uploadParams, err, data);
+                    
                     if(err)
                         return cb(err);
                     
@@ -572,14 +559,13 @@ class Home extends Base {
                 }
 
                 var qr = "select * from posts p, users u where p.user_id = u.user_id and p.post_type = '"+type+"' order by p."+ req.session.postsSortBy +" desc limit " + offset + ", 1";
-                console.log("homeq", qr);
+                
                 app.db.mysql.query(qr, cb);
             }
         ],
         function(err, results) {
             
-            console.log("FINAL", results);
-
+            
             var posts = results[0] && results[0][0] || [];
             var activities = results[1] && results[1][0] || [];
 
@@ -596,8 +582,6 @@ class Home extends Base {
                 activities : activities    
             };
             
-            console.log("HOME viewData", viewData,results)
-
             if(offset) {
                 res.render('posts_pagination', viewData);
             } else {
@@ -605,6 +589,18 @@ class Home extends Base {
             }
         });
 
+    }
+
+    getComments(req, res) {
+        var qr = "select u.image, ua.* from users u, user_activities ua where u.user_id = ua.user_id and ua.post_id="+req.params.postId+" order by ua.created desc limit 0, 15";
+                
+        app.db.mysql.query(qr, function(err, results){
+            
+            var viewData = {
+                comments : results 
+            };
+            res.render('comments', viewData)
+        });
     }
 
 }

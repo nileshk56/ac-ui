@@ -78,7 +78,12 @@ $( document ).ready(function() {
 
     $(document).on('click', ".btnPostComment", function(event){
 		var postId = parseInt($(this).data("postid"));
+        var url = $(this).attr('href');
         $("#divPostComments_"+postId).show();
+        
+        $.get(url, function(data) {
+            $("#divPostComments_"+postId).append(data);
+        });
 		return false;
     });
     
@@ -108,6 +113,10 @@ $( document ).ready(function() {
                 }
             });
          }
+    });
+
+    $('.formTxtComment').click(function(){ 
+        this.rows=2;
     });
 
     $(".formPostComment").submit(function(e){

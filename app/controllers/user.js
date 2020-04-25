@@ -14,7 +14,7 @@ class User extends Base {
             function(cb) {
                 
                 var qr  = "select ua.user_activity_type, ua.username as ua_username, ua.comment, ua.created, p.*, u.* from user_activities ua, posts p, users u where ua.post_id = p.post_id and p.user_id = u.user_id and ua.username = ('"+username+"') order by ua.created desc limit " +offset + ", 1";
-                console.log("QR2", qr)
+                
                 app.db.mysql.query(qr, cb);
             },
             function(cb) {
@@ -47,7 +47,7 @@ class User extends Base {
                 offset : offset,
                 image : user[0]["image"]    
             };
-            console.log("asdfad", viewData, results);   
+            
             res.render('user', viewData);
         });
     }
@@ -76,9 +76,9 @@ class User extends Base {
     friends(req, res){
         var username = req.params.username;
         var qr = 'SELECT * FROM users u, friends f where u.username = f.from_username and f.friendship_status="CONFIRM" and f.to_username="'+username+'" order by f.created desc limit 100';
-        console.log("asdfasdf",qr)
+        
         app.db.mysql.query(qr, function(err, results){
-            console.log("asdfasdf",qr, results, err)
+        
             var viewData = {
                 user : req.session.user,
                 msg : (req.session.msg && req.session.msg.body) || '',

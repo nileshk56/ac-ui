@@ -1,7 +1,11 @@
 <div class="media p-1">
     <div class="media-body">
-        <img src="https://www.w3schools.com/bootstrap4/img_avatar3.png" alt="John Doe" class="mr-3 rounded-circle float-left" style="width:40px;">
-        <h5><%= username %> <br><small><i class="small">Posted <%= commentTime %></i></small></h5>
+        <% if(image) {%>
+        <img src="<%= image %>" alt="<%= username %>" class="mr-3 rounded-circle float-left" style="width:40px;">
+        <% } else {%>
+            <i class="fas fa-user-circle fa-3x float-left mr-3"></i>
+        <% } %>
+        <h5><a href="<%= app.config.host + '/user/' + username %>" class="text-dark"><%= username %></a> <br><small><i class="small">Posted <%= new Date(created).toDateString() %></i></small></h5>
         <p><%= comment %></p>
     </div>
 </div>

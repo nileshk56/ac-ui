@@ -1,0 +1,6 @@
+
+<% if(comments) {
+    comments.forEach(function(comment){
+%>
+    <%- include('single_comment', comment); %>
+<% }) } %> 

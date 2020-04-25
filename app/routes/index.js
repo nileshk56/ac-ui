@@ -51,4 +51,7 @@ module.exports = function() {
 	app.get('/user/:username/friends', userController.friends)
 	app.get('/user/:username/unfriend', userController.unfriend)
 	app.get('/user/:username', userController.renderUser);
+
+	app.get('/post/:postId/comments', homeController.getComments);
+
 };
