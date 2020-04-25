@@ -7,6 +7,7 @@
 var express = require('express');
 var session = require('express-session');
 var fileUpload  = require('express-fileupload');
+var commonMiddleware = require('./middlewares/common.js');
 
 global.app = express();
 
@@ -37,6 +38,8 @@ app.use(express.urlencoded());
 
 //session
 app.use(session(app.config.session));
+
+app.use(commonMiddleware.isMobile);
 
 //set routes
 require('./routes')();

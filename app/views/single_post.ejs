@@ -58,7 +58,13 @@
           <a style="display: block;" href="<%= app.config.host + '/post/' + post_id + '/comments'%>" class="btnPostComment text-secondary" data-postid="<%= post_id %>" data-commentcount="<%= comment_count %>"><!--<i class="far fa-comment-dots text-secondary"></i> -->Comment <span class="font-weight-bold text-secondary"><%= comment_count %></span></a>
         </div>
         <div class="p-2 text-center flex-fill">
-          <a style="display: block;" href="<%= app.config.host + '/share/' + post_id %>" class="btnPostShare text-secondary" data-postid="<%= post_id %>" data-sharecount="<%= share_count %>"><!--<i class="far fa-share-square text-secondary"></i> -->Share <span class="font-weight-bold text-secondary"><%= share_count %></span></a>
+          <% if(app.config.isMobile) { 
+            var waUrl = "whatsapp://send?text="+encodeURIComponent(app.config.host + '/post/' + post_id);
+          %>
+            <a style="display: block;" href="<%= waUrl %>" class="text-secondary" ><i class="fab fa-whatsapp-square"></i> Share </a>
+          <% } else {%>
+            <a style="display: block;" href="<%= app.config.host + '/share/' + post_id %>" class="btnPostShare text-secondary" data-postid="<%= post_id %>" data-sharecount="<%= share_count %>"><!--<i class="far fa-share-square text-secondary"></i> -->Share <span class="font-weight-bold text-secondary"><%= share_count %></span></a>
+          <% } %>
         </div>
         <% } %>
         <% if(post_type=="V" || post_type=="I") { %>

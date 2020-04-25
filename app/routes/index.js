@@ -53,5 +53,6 @@ module.exports = function() {
 	app.get('/user/:username', userController.renderUser);
 
 	app.get('/post/:postId/comments', homeController.getComments);
+	app.get('/post/:postId', homeController.getPost);
 
 };
