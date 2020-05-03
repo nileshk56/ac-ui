@@ -25,7 +25,7 @@
                 <p class="mt-2"><%= post.post_desc %></p>
               <% } %>
               <% if(post.post_type=="I") { %>
-                <p class="<%= post.post_desc ? 'mt-2' : '' %>"><img class="img-fluid" src="<%= post.media_path %>"></p>
+                <p class="<%= post.post_desc ? 'mt-2' : '' %>"><img class="img-fluid" src="<%= post.media_path %>" alt="<%= post.media_alt %>"></p>
               <% } %>
         
               <% if(post.post_type=="V") { %>
@@ -40,7 +40,7 @@
                 <p><b>Tags : </b> 
                 <%      post.tags.split(" ").forEach(function(tag){
                 %>
-                  <a href="/tag/"+tag><%= tag%></a>
+                <a href="<%= '/tag/' + tag %>"><%= tag%></a>
                 <% }) 
                 %>
                 </p>        

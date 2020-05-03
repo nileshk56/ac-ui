@@ -2,8 +2,6 @@
 <%- include('header', user) %>
 <div class="container" >
     
-
-    
     <div class="row">
         <div class="col-md-6 p-0" id="divPosts">
             <h1><%= post['page_title']%></h1>
@@ -26,7 +24,7 @@
                   <% } %>
                   
                   <% if(post.post_type=="I") { %>
-                    <p class="<%= post.post_desc ? 'mt-2' : '' %>"><img class="img-fluid" src="<%= post.media_path %>"></p>
+                    <p class="<%= post.post_desc ? 'mt-2' : '' %>"><img class="img-fluid" src="<%= post.media_path %>" alt="<%= post.media_alt %>"></p>
                   <% } %>
             
                   <% if(post.post_type=="V") { %>
@@ -41,7 +39,7 @@
                     <p><b>Tags : </b> 
                     <%      post.tags.split(" ").forEach(function(tag){
                     %>
-                      <a href="/tag/"+tag><%= tag%></a>
+                      <a href="<%= '/tag/' + tag %>"><%= tag%></a>
                     <% }) 
                     %>
                     </p>        
@@ -93,7 +91,7 @@
                 </div>
             </div>
             <hr style="border-top: solid 5px #CCC;" >   
-            <h2>Other Posts</h2>
+            <h3>Related Posts</h3>
             <hr style="border-top: solid 5px #CCC;" >   
           <% if(otherPosts) {
             otherPosts.forEach(function(post){
@@ -116,7 +114,7 @@
               <% } %>
               
               <% if(post.post_type=="I") { %>
-                <p class="<%= post.post_desc ? 'mt-2' : '' %>"><img class="img-fluid" src="<%= post.media_path %>"></p>
+                <p class="<%= post.post_desc ? 'mt-2' : '' %>"><img class="img-fluid" src="<%= post.media_path %>" alt="<%= post.media_alt %>"></p>
               <% } %>
         
               <% if(post.post_type=="V") { %>
@@ -131,7 +129,7 @@
                 <p><b>Tags : </b> 
                 <%      post.tags.split(" ").forEach(function(tag){
                 %>
-                  <a href="/tag/"+tag><%= tag%></a>
+                <a href="<%= '/tag/' + tag %>"><%= tag%></a>
                 <% }) 
                 %>
                 </p>        

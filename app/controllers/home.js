@@ -436,35 +436,41 @@ class Home extends Base {
         
 
         //NEW
-        app.lib.async.parallel([
-            function(cb) {
+        app.lib.async.auto({
+            postData : function(cb) {
                 var qr = "select * from posts p, users u where p.user_id = u.user_id and p.post_id = "+postId;
                 console.log("asdf", qr)
                 app.db.mysql.query(qr, cb);
             },
-            function(cb) {
+            otherPostsData : ["postData", function( results, cb) {
+                console.log("RESSPP",results.postData[0][0]);
+                var postData = results.postData[0][0];
                 
-                var qr = "select * from posts p, users u where p.user_id = u.user_id and post_id > "+postId+" limit 20";
+                var tagCond="";
+                if(postData.tags) {
+                    var tagCond = " and (";
+                    postData.tags.split(" ").forEach(function(tag){
+                        tagCond += "p.tags like '%"+tag+"%' OR "
+                    });
+                    tagCond = tagCond.substr(0, tagCond.length-4);
+                    tagCond += ")";
+                }
+
+                var qr = "select * from posts p, users u where p.user_id = u.user_id and p.post_id <> "+postId + tagCond+" limit 20";
                 console.log("asdf", qr)
                 app.db.mysql.query(qr, cb);
-            },
-        ],
+            }],
+        },
         function(err, results) {
             
-            console.log("err,", err, results);
+            var posts = results.postData[0] || [];
+            var otherPosts = results.otherPostsData[0] || [];
             
-            var posts = results[0] && results[0][0] || [];
-            var otherPosts = results[1] && results[1][0] || [];
-            
-            posts = posts.concat(otherPosts);
-
-            if(offset && posts.length == 0 ) {
-                return res.json({
-                    status : "FAIL"
-                });
-            }
-
             posts.map(function(post){
+                post.isLoggedIn = req.session.user ? true : false;
+                return post;
+            });
+            otherPosts.map(function(post){
                 post.isLoggedIn = req.session.user ? true : false;
                 return post;
             }); 
