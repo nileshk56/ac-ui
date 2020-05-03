@@ -1,0 +1,193 @@
+<%- include('head_posts', post) %>
+<%- include('header', user) %>
+<div class="container" >
+    
+
+    
+    <div class="row">
+        <div class="col-md-6 p-0" id="divPosts">
+            <h1><%= post['page_title']%></h1>
+          
+            <div class="media pl-3 pr-3 mt-4 mb-4">
+                <div class="media-body">
+                  <div>
+                    
+                    <% if(post.image) { %>  
+                    <img src="<%= post.image %>" alt="<%= post.username %>" class="mr-3 rounded-circle float-left" style="width:45px;" />
+                    <%} else {%>
+                    <p><i class="fas fa-user-circle fa-3x float-left mr-3"></i>
+                    <% } %>
+                    <a href="<%= app.config.host + '/user/' + post.username %>" class="text-dark" ><h5 class="mb-0 pt-1"><%= post.username %></h5></a>
+                    <span class="text-muted small">Posted <%= new Date(post.created).toDateString() %></span></p>
+                    
+                  </div>
+                  <% if(post.post_desc) { %>
+                    <p class="mt-2"><%= post.post_desc %></p>
+                  <% } %>
+                  
+                  <% if(post.post_type=="I") { %>
+                    <p class="<%= post.post_desc ? 'mt-2' : '' %>"><img class="img-fluid" src="<%= post.media_path %>"></p>
+                  <% } %>
+            
+                  <% if(post.post_type=="V") { %>
+                    <p class="embed-responsive embed-responsive-4by3">
+                        <video controls class="embed-responsive-item">
+                            <source src="<%= post.media_path %>" type="video/mp4">
+                        </video>
+                    </p>
+                  <% } %>
+                  
+                  <% if(post.tags) { %>
+                    <p><b>Tags : </b> 
+                    <%      post.tags.split(" ").forEach(function(tag){
+                    %>
+                      <a href="/tag/"+tag><%= tag%></a>
+                    <% }) 
+                    %>
+                    </p>        
+                    <% } %>
+                    <%
+                    page_title = post.page_title || "";
+                    %>
+                    <p><a href="<%= app.config.host + '/post/' + post.post_id + '/' + page_title.replace(' ', '_') %>">More <%= page_title %></a></p>
+    
+                  <%
+                    showBorder = post.post_type=='V' || post.post_type=='I' || isLoggedIn ? "border-top border-bottom" : "";
+                  %>
+            
+                  <div class="d-flex <%= showBorder %>">
+                    <% if(isLoggedIn) {%>
+                    <div class="p-2 text-center flex-fill">
+                      <a style="display: block;" href="<%= app.config.host + '/like/' + post.post_id %>" class="btnPostLike text-secondary" data-postid="<%= post.post_id %>" data-likecount="<%= post.like_count %>"><!--<i class="far fa-thumbs-up text-secondary"></i> -->Like <span class="font-weight-bold text-secondary"><%= like_count %></span></a> 
+                    </div>
+                    <div class="p-2 text-center flex-fill">
+                      <a style="display: block;" href="<%= app.config.host + '/post/' + post.post_id + '/comments'%>" class="btnPostComment text-secondary" data-postid="<%= post.post_id %>" data-commentcount="<%= post.comment_count %>"><!--<i class="far fa-comment-dots text-secondary"></i> -->Comment <span class="font-weight-bold text-secondary"><%= post.comment_count %></span></a>
+                    </div>
+                    
+                    <% } %>
+                    
+                    <div class="p-2 text-center flex-fill">
+                        <% if(app.config.isMobile) { 
+                          var waUrl = "whatsapp://send?text="+encodeURIComponent(app.config.host + '/post/' + post.post_id);
+                        %>
+                          <a style="display: block;" href="<%= waUrl %>" class="text-secondary" ><i class="fab fa-whatsapp-square"></i> Share </a>
+                        <% } else {%>
+                          <a style="display: block;" <% if(isLoggedIn) { %> href="<%= app.config.host + '/share/' + post.post_id %>" class="btnPostShare text-secondary" data-postid="<%= post.post_id %>" data-sharecount="<%= post.share_count %>" <% } %> ><!--<i class="far fa-share-square text-secondary"></i> -->Share <span class="font-weight-bold text-secondary"><%= post.share_count %></span></a>
+                        <% } %>
+                    </div>
+    
+                    <% if(post.post_type=="V" || post.post_type=="I") { %>
+                    <div class="p-2 text-center flex-fill">
+                      <a style="display: block;" href="<%= app.config.host + '/download?url='+post.media_path %>" class="text-secondary"><!--<i class="fas fa-download"></i> -->Download<span class="font-weight-bold text-secondary">&nbsp;</span></a>
+                    </div>
+                    <% } %>
+                  </div>
+                  <div id="divPostComments_<%= post.post_id %>" style="display: none;">
+                      <form action="<%= app.config.host + '/comment' %>" method="post" class="formPostComment">
+                          <textarea placeholder="Write a comment..." rows="1" class="form-control border-0 formTxtComment" name="comment"></textarea>
+                          <input type="hidden" value="<%= post.post_id %>" name="post_id" >
+                      </form>  
+                  
+                  </div>
+                  
+                </div>
+            </div>
+            <hr style="border-top: solid 5px #CCC;" >   
+            <h2>Other Posts</h2>
+            <hr style="border-top: solid 5px #CCC;" >   
+          <% if(otherPosts) {
+            otherPosts.forEach(function(post){
+          %>
+          <div class="media pl-3 pr-3 mt-4 mb-4">
+            <div class="media-body">
+              <div>
+                
+                <% if(post.image) { %>  
+                <img src="<%= post.image %>" alt="<%= post.username %>" class="mr-3 rounded-circle float-left" style="width:45px;" />
+                <%} else {%>
+                <p><i class="fas fa-user-circle fa-3x float-left mr-3"></i>
+                <% } %>
+                <a href="<%= app.config.host + '/user/' + post.username %>" class="text-dark" ><h5 class="mb-0 pt-1"><%= post.username %></h5></a>
+                <span class="text-muted small">Posted <%= new Date(post.created).toDateString() %></span></p>
+                
+              </div>
+              <% if(post.post_desc) { %>
+                <p class="mt-2"><%= post.post_desc %></p>
+              <% } %>
+              
+              <% if(post.post_type=="I") { %>
+                <p class="<%= post.post_desc ? 'mt-2' : '' %>"><img class="img-fluid" src="<%= post.media_path %>"></p>
+              <% } %>
+        
+              <% if(post.post_type=="V") { %>
+                <p class="embed-responsive embed-responsive-4by3">
+                    <video controls class="embed-responsive-item">
+                        <source src="<%= post.media_path %>" type="video/mp4">
+                    </video>
+                </p>
+              <% } %>
+              
+              <% if(post.tags) { %>
+                <p><b>Tags : </b> 
+                <%      post.tags.split(" ").forEach(function(tag){
+                %>
+                  <a href="/tag/"+tag><%= tag%></a>
+                <% }) 
+                %>
+                </p>        
+                <% } %>
+                <%
+                page_title = post.page_title || "";
+                %>
+                <p><a href="<%= app.config.host + '/post/' + post.post_id + '/' + page_title.replace(' ', '_') %>">More <%= page_title %></a></p>
+
+              <%
+                showBorder = post.post_type=='V' || post.post_type=='I' || isLoggedIn ? "border-top border-bottom" : "";
+              %>
+        
+              <div class="d-flex <%= showBorder %>">
+                <% if(isLoggedIn) {%>
+                <div class="p-2 text-center flex-fill">
+                  <a style="display: block;" href="<%= app.config.host + '/like/' + post.post_id %>" class="btnPostLike text-secondary" data-postid="<%= post.post_id %>" data-likecount="<%= post.like_count %>"><!--<i class="far fa-thumbs-up text-secondary"></i> -->Like <span class="font-weight-bold text-secondary"><%= like_count %></span></a> 
+                </div>
+                <div class="p-2 text-center flex-fill">
+                  <a style="display: block;" href="<%= app.config.host + '/post/' + post.post_id + '/comments'%>" class="btnPostComment text-secondary" data-postid="<%= post.post_id %>" data-commentcount="<%= post.comment_count %>"><!--<i class="far fa-comment-dots text-secondary"></i> -->Comment <span class="font-weight-bold text-secondary"><%= post.comment_count %></span></a>
+                </div>
+                
+                <% } %>
+                
+                <div class="p-2 text-center flex-fill">
+                    <% if(app.config.isMobile) { 
+                      var waUrl = "whatsapp://send?text="+encodeURIComponent(app.config.host + '/post/' + post.post_id);
+                    %>
+                      <a style="display: block;" href="<%= waUrl %>" class="text-secondary" ><i class="fab fa-whatsapp-square"></i> Share </a>
+                    <% } else {%>
+                      <a style="display: block;" <% if(isLoggedIn) { %> href="<%= app.config.host + '/share/' + post.post_id %>" class="btnPostShare text-secondary" data-postid="<%= post.post_id %>" data-sharecount="<%= post.share_count %>" <% } %> ><!--<i class="far fa-share-square text-secondary"></i> -->Share <span class="font-weight-bold text-secondary"><%= post.share_count %></span></a>
+                    <% } %>
+                </div>
+
+                <% if(post.post_type=="V" || post.post_type=="I") { %>
+                <div class="p-2 text-center flex-fill">
+                  <a style="display: block;" href="<%= app.config.host + '/download?url='+post.media_path %>" class="text-secondary"><!--<i class="fas fa-download"></i> -->Download<span class="font-weight-bold text-secondary">&nbsp;</span></a>
+                </div>
+                <% } %>
+              </div>
+              <div id="divPostComments_<%= post.post_id %>" style="display: none;">
+                  <form action="<%= app.config.host + '/comment' %>" method="post" class="formPostComment">
+                      <textarea placeholder="Write a comment..." rows="1" class="form-control border-0 formTxtComment" name="comment"></textarea>
+                      <input type="hidden" value="<%= post.post_id %>" name="post_id" >
+                  </form>  
+              
+              </div>
+              
+            </div>
+          </div>
+          <hr style="border-top: solid 5px #CCC;" >    
+          <% }) } %>  
+
+        </div>
+    </div>
+    
+</div>
+<br>    
+<%- include('footer') %>

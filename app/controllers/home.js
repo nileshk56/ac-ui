@@ -96,76 +96,6 @@ class Home extends Base {
 
     }
 
-    renderKYC(req, res) {
-        var viewData = {
-            user : req.session.user
-        };
-        res.render('add_kyc', viewData);
-    }
-
-    insertKYC(req, res) {
-
-        let uploadPath = __dirname + "/../../public/" + app.config.uploads.kyc + "/";
-
-        let addressProof = req.files.address_proof;
-        let addressProofFileName =  "address_proof_" + req.session.user.user_id + "." + addressProof.name;
-        
-        let idProof = req.files.identity_proof;
-        let idProofFileName = "id_proof_" + req.session.user.user_id + "." + idProof.name;
-
-        app.lib.async.parallel([
-            function(cb) {
-                addressProof.mv(uploadPath + addressProofFileName, cb)
-            },
-            function(cb) {
-                idProof.mv(uploadPath + idProofFileName, cb)
-            }
-        ],function(err){
-            
-            if(err) {
-                return res.redirect('/error');
-            }
-
-            var data = req.body; 
-            data.user_id = req.session.user.user_id;
-            data.address_proof = app.config.host + "/" + app.config.uploads.kyc +"/"+ addressProofFileName;
-            data.identity_proof = app.config.host + "/" + app.config.uploads.kyc +"/"+ idProofFileName;
-            data.updated = null;
-            
-            req.session.user.kyc = data;
-            req.session.user.status = 'KYC_ADDED';
-
-            modelUsers.fetch('kyc', '*', {user_id:req.session.user.user_id}, null, null, null, function(err, results){
-                if(results.length == 0) {
-
-                    modelUsers.insert('kyc', data, function(err){
-                        if(err) {
-                            return res.redirect('/error')
-                        }
-                        modelUsers.update('users', {status:'KYC_ADDED'}, {user_id:req.session.user.user_id},()=>{}); 
-                        res.redirect('/settings/kyc');
-                    });
-
-                } else {
-
-                    modelUsers.update('kyc', data, {user_id:req.session.user.user_id}, function(err){
-                        if(err) {
-                            return res.redirect('/error')
-                        }
-                        modelUsers.update('users', {status:'KYC_ADDED'}, {user_id:req.session.user.user_id},()=>{}); 
-                        res.redirect('/settings/kyc');
-                    });
-
-                }
-
-                
-
-            });
-
-            
-        });
-    }
-
     createPost(req, res) {
         
         let uploadPath = __dirname + "/../../public/" + app.config.uploads.uploadpath + "/";
@@ -236,113 +166,6 @@ class Home extends Base {
                 postData.isLoggedIn = true;
                 res.render('single_post', postData)
             });
-        });
-    }
-
-    renderKYCOfUser(req, res) {
-        modelUsers.fetch('kyc', '*', {user_id:req.params.userid}, null, null, null, function(err, results){
-            if(err) {
-                return res.redirect('/');
-            }
-            var kycData = results[0];
-            kycData.gender = kycData.gender == 'M' ? 'Male' : 'Female';
-            
-            var viewData = {
-                kyc : kycData,
-                msg : req.query.msg,
-                user : req.session.user
-            };
-
-            res.render('kyc', viewData);
-        })    
-    }
-
-    getTokenAmount(req, res) {
-
-        var symbol = req.query.symbol;
-        var curr_amount = req.query.curr_amount;
-
-        if(symbol == 'USD') {
-            var tokens = curr_amount / app.config.tokenPrice;
-            return res.json({tokens:tokens});
-        }
-
-        var reqOptions = {
-            method : "get",
-            uri : app.config.apiCurrency.apiUrl,
-            qs : {
-                symbol : symbol
-            },
-            headers: {
-                'X-CMC_PRO_API_KEY': app.config.apiCurrency.apiKey
-            },
-            json: true,
-            gzip: true
-        };
-
-        app.lib.request(reqOptions, function(err, response, body){
-            if(err) {
-                return res.status(500).json(err);
-            }
-
-            var dollars = curr_amount * body.data[symbol]["quote"]["USD"]["price"];
-
-            var tokens = dollars / app.config.tokenPrice;
-
-            res.json({tokens:tokens});
-        });
-    }
-    
-    insertBuyOrders(req, res) {  
-
-        var depositAddress;
-        
-        modelUsers.fetch('user_deposit_addresses', 'address', { user_id : req.session.user.user_id, symbol : req.body.buy_with}, null, null, null, function(err, results){
-
-            
-            if(results[0]) {
-
-                depositAddress = results[0].address;
-
-            } else {
-
-                var arrDepositAddress = app.lib.common.generateAddress(req.body.buy_with);
-                depositAddress = arrDepositAddress[0];
-
-                //insert user address
-                var userAddressData = {
-                    user_id : req.session.user.user_id,
-                    symbol : req.body.buy_with,
-                    address : arrDepositAddress[0],
-                    private_key : arrDepositAddress[1],
-                };
-
-                
-                modelUsers.insert('user_deposit_addresses', userAddressData, ()=>{});
-            }
-
-            var data = {
-                user_id : req.session.user.user_id,
-                symbol : req.body.buy_with,
-                deposit_address : depositAddress,
-                from_address : req.body.from_address,
-                to_address : req.body.to_address,
-                symbol_amount : req.body.curr_amount,
-                token_amount : req.body.token_amount
-            };
-
-            
-            modelUsers.insert('buy_orders', data, function(err, results){
-                if(err) {
-                    
-                    if(err) {
-                        return res.status(500).json(err);
-                    }
-                }
-                
-                res.json({depositAddress : depositAddress});
-            });
-
         });
     }
 
@@ -616,25 +439,13 @@ class Home extends Base {
         app.lib.async.parallel([
             function(cb) {
                 var qr = "select * from posts p, users u where p.user_id = u.user_id and p.post_id = "+postId;
-                
+                console.log("asdf", qr)
                 app.db.mysql.query(qr, cb);
             },
             function(cb) {
-                //we want to show user lots of new posts if we keep only sort by like_count then user will see same posts
-                //save above sortby in session so for further more/pagination request we will show him the sorted posts
-                //this sortby stored in session is used in renderPosts()
-                //if !offset means its first page and set the session for sort order
-                if(!offset) {
-                    req.session.postsSortBy = (Math.floor(Math.random()*10) % 2 == 0) ? "like_count" : "created";
-                }
-
-                //show logged in user only most liked content
-                if(!req.session.user) {
-                    req.session.postsSortBy = "like_count"
-                }
-
-                var qr = "select * from posts p, users u where p.user_id = u.user_id order by p."+ req.session.postsSortBy +" desc limit " + offset + ", 10";
                 
+                var qr = "select * from posts p, users u where p.user_id = u.user_id and post_id > "+postId+" limit 20";
+                console.log("asdf", qr)
                 app.db.mysql.query(qr, cb);
             },
         ],
@@ -661,18 +472,95 @@ class Home extends Base {
             var viewData = {
                 user : req.session.user,
                 msg : msg.body,
-                posts : posts,
+                post : posts[0],
+                otherPosts : otherPosts,
                 type : "",
-                activities : false
+                activities : false,
+                isLoggedIn : req.session.user ? true : false
             };
             
             delete req.session.msg;
 
-            if(offset) {
-                res.render('posts_pagination', viewData);
-            } else {
-                res.render('home', viewData);
+            res.render("post", viewData);
+        });
+
+    }
+
+    getAllPost(req, res) {
+        
+        var offset = parseInt(req.query.offset) || 0;
+        var msg  = req.session.msg || {};
+        delete req.session.msg;
+
+        //NEW
+        app.lib.async.parallel([
+            function(cb) {
+                var qr = "select * from posts p, users u where p.user_id = u.user_id order by p.created limit "+offset+", 20";
+                console.log("QR", qr);
+                app.db.mysql.query(qr, cb);
             }
+        ],
+        function(err, results) {
+            
+            console.log("err,", err, results);
+            
+            var posts = results[0] && results[0][0] || [];
+            
+            console.log("qr", posts[0]);
+
+            var viewData = {
+                user : req.session.user,
+                msg : msg.body,
+                posts : posts,
+                type : "",
+                isLoggedIn : req.session.user ? true : false,
+                offset : offset,
+                showPagination : posts.length
+            };
+            
+            delete req.session.msg;
+
+            res.render('allposts', viewData);
+        });
+
+    }
+
+    getTagData(req, res) {
+        
+        var offset = parseInt(req.query.offset) || 0;
+        var msg  = req.session.msg || {};
+        delete req.session.msg;
+        var tag = req.params.tag;
+
+        //NEW
+        app.lib.async.parallel([
+            function(cb) {
+                var qr = "select * from posts p, users u where p.user_id = u.user_id and tags like '%"+tag+"%' order by p.like_count limit "+offset+", 20";
+                console.log("QR", qr);
+                app.db.mysql.query(qr, cb);
+            }
+        ],
+        function(err, results) {
+            
+            console.log("err,", err, results);
+            
+            var posts = results[0] && results[0][0] || [];
+            
+            console.log("qr", posts[0]);
+
+            var viewData = {
+                user : req.session.user,
+                msg : msg.body,
+                posts : posts,
+                type : "",
+                isLoggedIn : req.session.user ? true : false,
+                offset : offset,
+                showPagination : posts.length
+            };
+            
+            delete req.session.msg;
+
+            res.render('allposts', viewData);
         });
 
     }

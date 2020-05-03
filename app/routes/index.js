@@ -40,6 +40,8 @@ module.exports = function() {
 	app.get("/upp", commonMiddleware.isLoggedIn, homeController.renderUpp);
 	app.post("/upp", commonMiddleware.isLoggedIn, homeController.upp);
 	app.get("/download", homeController.download);
+	app.get("/allposts", homeController.getAllPost);
+	app.get("/tag/:tag", homeController.getTagData);
 
 	app.get('/login', loginController.renderLogin);
 	app.post('/login', loginController.signIn);
@@ -53,6 +55,8 @@ module.exports = function() {
 	app.get('/user/:username', userController.renderUser);
 
 	app.get('/post/:postId/comments', homeController.getComments);
+	app.get('/post/:postId/:title', homeController.getPost);
 	app.get('/post/:postId', homeController.getPost);
+	
 
 };
